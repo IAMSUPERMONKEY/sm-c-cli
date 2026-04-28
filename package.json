@@ -1,7 +1,7 @@
 {
   "name": "sm-c-cli",
   "version": "0.1.0",
-  "description": "SUPERMONKEY C-end CLI for class schedule queries.",
+  "description": "SUPERMONKEY 用户端 CLI",
   "type": "module",
   "private": true,
   "license": "UNLICENSED",

@@ -8,8 +8,8 @@ export function createProgram(): Command {
   program
     .name(PKG_NAME)
     .version(PKG_VERSION, '-v, --version')
-    .option('--format <format>', 'output format: json | ndjson | table | pretty', 'json')
-    .option('--verbose', 'verbose logging to stderr', false);
+    .option('--format <format>', '输出格式：json | ndjson | table | pretty', 'json')
+    .option('--verbose', '将调试日志写到 stderr', false);
 
   registerResources(program);
 

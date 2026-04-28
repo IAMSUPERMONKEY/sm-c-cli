@@ -18,6 +18,12 @@
 - `stdout` 只写命令结果（JSON / NDJSON / pretty）；人类可读错误、调试日志、`--verbose` 信息只写 `stderr`。
 - 字段中文说明写在 Zod schema 的 `.describe()` 中；pretty 表头等展示层通过 `labelOf` / `labelsOf` 从 schema 元数据读取。复合列（如 `startTime + endTime` 渲染成“时间”）可以在展示层显式命名。
 
+## 用户可见文案
+
+- 用户可见的文案统一使用中文，包括 `commander` 的 resource / shortcut `description`、flag 描述、错误提示、`writeEnvelope` 在 `pretty` / `table` 模式下输出的额外提示。
+- flag 名（如 `--city` / `--keyword`）保持英文，flag 后的描述用中文。
+- 内部代码、函数名、类型、注释保持英文/原样。
+
 ## 目录与依赖边界
 
 - 新增 resource 时放在 `src/resources/<name>/` 下，常见文件包括 `index.ts`、`api.ts`、`schema.ts`、`pretty.ts`、`tests/`；并在 `src/cli/register.ts` 注册。

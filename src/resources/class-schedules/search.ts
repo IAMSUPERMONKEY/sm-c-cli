@@ -13,10 +13,10 @@ import { toCliError } from '../../shared/http/errors.js';
 export function registerSearch(parent: Command): void {
   parent
     .command('+search')
-    .description('Search class schedules by city, keyword and optional date')
-    .requiredOption('--city <city>', 'city name')
-    .requiredOption('--keyword <keyword>', 'store / class / trainer keyword')
-    .option('--date <date>', 'date, YYYY-MM-DD')
+    .description('按城市 + 关键词（门店 / 课程 / 教练）+ 可选日期搜索团课课表')
+    .requiredOption('--city <city>', '城市名称')
+    .requiredOption('--keyword <keyword>', '关键词：门店 / 课程 / 教练')
+    .option('--date <date>', '日期，格式 YYYY-MM-DD')
     .action(async (opts: Record<string, unknown>, cmd: Command) => {
       const root = cmd.parent?.parent;
       const rawFormat = (root?.opts().format as string | undefined) ?? 'json';
