@@ -28,15 +28,13 @@ export async function searchClassSchedules(
     pageSize,
     ...(options.intervalMs !== undefined && { intervalMs: options.intervalMs }),
     fetchPage: async ({ limit, offset }) => {
-      const res = await client.post(API_PATHS.classSchedulesSearch, undefined, {
-        params: {
-          city: input.city,
-          keyword: input.keyword,
-          searchType: SEARCH_TYPE_GROUP_CLASS,
-          ...(input.date !== undefined && { date: input.date }),
-          limit,
-          offset,
-        },
+      const res = await client.post(API_PATHS.classSchedulesSearch, {
+        city: input.city,
+        keyword: input.keyword,
+        searchType: SEARCH_TYPE_GROUP_CLASS,
+        ...(input.date !== undefined && { date: input.date }),
+        limit,
+        offset,
       });
       const env = SearchPageEnvelope.parse(res.data);
       if (env.code !== 0) {
@@ -46,5 +44,13 @@ export async function searchClassSchedules(
     },
   });
 
-  return { list };
+  const seen = new Set<number>();
+  const deduped: ClassSchedule[] = [];
+  for (const item of list) {
+    if (seen.has(item.scheduleId)) continue;
+    seen.add(item.scheduleId);
+    deduped.push(item);
+  }
+
+  return { list: deduped };
 }

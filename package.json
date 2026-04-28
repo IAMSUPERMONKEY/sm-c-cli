@@ -1,20 +1,24 @@
 {
   "name": "sm-c-cli",
-  "version": "0.1.0",
+  "version": "0.1.2",
   "description": "SUPERMONKEY 用户端 CLI",
   "type": "module",
-  "private": true,
   "license": "UNLICENSED",
   "author": "deepfunc <xiekai0601@gmail.com>",
   "repository": {
     "type": "git",
     "url": "git+ssh://git@codeup.aliyun.com/supermonkey/supermonkey-web/sm-c-cli.git"
   },
+  "publishConfig": {
+    "registry": "http://npm.internal.supermonkey.com.cn:4873/"
+  },
   "bin": {
     "sm-c-cli": "./dist/index.js"
   },
   "files": [
-    "dist"
+    "dist",
+    "skills",
+    "README.md"
   ],
   "scripts": {
     "dev": "tsx src/index.ts",
@@ -23,7 +27,8 @@
     "test:watch": "vitest",
     "lint": "eslint .",
     "format": "prettier --write .",
-    "check": "pnpm lint && pnpm test && pnpm build"
+    "check": "pnpm lint && pnpm test && pnpm build",
+    "prepublishOnly": "pnpm lint && pnpm test && pnpm build"
   },
   "engines": {
     "node": ">=20"

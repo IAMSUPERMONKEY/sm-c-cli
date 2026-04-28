@@ -44,18 +44,16 @@ describe('searchClassSchedules', () => {
       },
     });
 
-    await searchClassSchedules({ city: '上海', keyword: '单车', date: '2026-04-28' });
+    await searchClassSchedules({ city: '上海市', keyword: '单车', date: '2026-04-28' });
 
     expect(post).toHaveBeenCalledTimes(1);
-    expect(post).toHaveBeenCalledWith('/class-schedules/search', undefined, {
-      params: {
-        city: '上海',
-        keyword: '单车',
-        searchType: 1,
-        date: '2026-04-28',
-        limit: 50,
-        offset: 0,
-      },
+    expect(post).toHaveBeenCalledWith('/class-schedules/search', {
+      city: '上海市',
+      keyword: '单车',
+      searchType: 1,
+      date: '2026-04-28',
+      limit: 50,
+      offset: 0,
     });
   });
 
@@ -64,14 +62,14 @@ describe('searchClassSchedules', () => {
       data: { code: 0, msg: 'success', data: { list: [], limit: 50, offset: 0, totalHits: 0 } },
     });
 
-    await searchClassSchedules({ city: '上海', keyword: '单车' });
+    await searchClassSchedules({ city: '上海市', keyword: '单车' });
 
-    expect(post.mock.calls[0]![2].params).not.toHaveProperty('date');
+    expect(post.mock.calls[0]![1]).not.toHaveProperty('date');
   });
 
   it('totalHits 超过 pageSize 时自动聚合所有分页', async () => {
-    post.mockImplementation(async (_path, _body, { params }) => {
-      const { offset } = params as { offset: number };
+    post.mockImplementation(async (_path, body) => {
+      const { offset } = body as { offset: number };
       if (offset === 0) {
         return {
           data: {
@@ -96,22 +94,65 @@ describe('searchClassSchedules', () => {
     });
 
     const result = await searchClassSchedules(
-      { city: '上海', keyword: '单车' },
+      { city: '上海市', keyword: '单车' },
       { pageSize: 2, intervalMs: 0 },
     );
 
     expect(result.list).toHaveLength(3);
     expect(post).toHaveBeenCalledTimes(2);
-    expect((post.mock.calls[1]![2].params as { offset: number }).offset).toBe(2);
+    expect((post.mock.calls[1]![1] as { offset: number }).offset).toBe(2);
+  });
+
+  it('分页结果中存在重复 scheduleId 时按 scheduleId 去重并保留原顺序', async () => {
+    post.mockImplementation(async (_path, body) => {
+      const { offset } = body as { offset: number };
+      if (offset === 0) {
+        return {
+          data: {
+            code: 0,
+            msg: 'success',
+            data: {
+              list: [schedule(1), schedule(2)],
+              limit: 2,
+              offset: 0,
+              totalHits: 4,
+            },
+          },
+        };
+      }
+      return {
+        data: {
+          code: 0,
+          msg: 'success',
+          data: {
+            list: [schedule(2), schedule(3)],
+            limit: 2,
+            offset: 2,
+            totalHits: 4,
+          },
+        },
+      };
+    });
+
+    const result = await searchClassSchedules(
+      { city: '上海市', keyword: '单车' },
+      { pageSize: 2, intervalMs: 0 },
+    );
+
+    expect(result.list.map((s) => s.scheduleId)).toEqual([1, 2, 3]);
   });
 
   it('上游信封 code 非 0 时抛出 CliError', async () => {
     post.mockResolvedValueOnce({
-      data: { code: 30000, msg: 'upstream busted', data: { list: [], limit: 50, offset: 0, totalHits: 0 } },
+      data: {
+        code: 30000,
+        msg: 'upstream busted',
+        data: { list: [], limit: 50, offset: 0, totalHits: 0 },
+      },
     });
 
     await expect(
-      searchClassSchedules({ city: '上海', keyword: '单车' }, { intervalMs: 0 }),
+      searchClassSchedules({ city: '上海市', keyword: '单车' }, { intervalMs: 0 }),
     ).rejects.toMatchObject({ code: 30000, message: 'upstream busted' });
   });
 });
