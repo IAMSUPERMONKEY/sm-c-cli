@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { searchClassSchedules } from '../api.js';
+import { getClassScheduleOrderCode, searchClassSchedules } from '../api.js';
 import { getHttpClient } from '../../../shared/http/client.js';
 import type { ClassSchedule } from '../schema.js';
 
@@ -154,5 +154,45 @@ describe('searchClassSchedules', () => {
     await expect(
       searchClassSchedules({ city: '上海市', keyword: '单车' }, { intervalMs: 0 }),
     ).rejects.toMatchObject({ code: 30000, message: 'upstream busted' });
+  });
+});
+
+describe('getClassScheduleOrderCode', () => {
+  const post = vi.fn();
+
+  beforeEach(() => {
+    post.mockReset();
+    vi.mocked(getHttpClient).mockReturnValue({ post } as never);
+  });
+
+  it('以 POST 方式请求 getOrderCode 路径，并带上 scheduleId 和 scheduleIdSk', async () => {
+    post.mockResolvedValueOnce({
+      data: {
+        code: 0,
+        msg: 'success',
+        data: { codeUrl: 'https://img.example.com/code.png' },
+      },
+    });
+
+    const result = await getClassScheduleOrderCode({
+      scheduleId: 1445941891,
+      scheduleIdSk: 'd3ac6ed0',
+    });
+
+    expect(post).toHaveBeenCalledWith('/class-schedules/getOrderCode', {
+      scheduleId: 1445941891,
+      scheduleIdSk: 'd3ac6ed0',
+    });
+    expect(result).toEqual({ codeUrl: 'https://img.example.com/code.png' });
+  });
+
+  it('上游信封 code 非 0 时抛出 CliError', async () => {
+    post.mockResolvedValueOnce({
+      data: { code: 40004, msg: 'schedule not found', data: { codeUrl: '' } },
+    });
+
+    await expect(
+      getClassScheduleOrderCode({ scheduleId: 1, scheduleIdSk: 'sk' }),
+    ).rejects.toMatchObject({ code: 40004, message: 'schedule not found' });
   });
 });

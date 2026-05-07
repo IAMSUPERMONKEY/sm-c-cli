@@ -45,3 +45,37 @@ export const SearchResult = z.object({
   list: z.array(ClassSchedule).describe('课表列表'),
 });
 export type SearchResult = z.infer<typeof SearchResult>;
+
+export const OrderInput = z.object({
+  scheduleId: z
+    .union([z.string(), z.number()])
+    .transform((v, ctx) => {
+      const n = typeof v === 'number' ? v : Number(v);
+      if (!Number.isFinite(n) || !Number.isInteger(n) || n <= 0) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          message: '--schedule-id must be a positive integer',
+        });
+        return z.NEVER;
+      }
+      return n;
+    })
+    .describe('课表 id'),
+  scheduleIdSk: z
+    .string()
+    .min(1, '--schedule-id-sk is required')
+    .describe('课表 id 验证'),
+});
+export type OrderInput = z.infer<typeof OrderInput>;
+
+export const OrderResult = z.object({
+  codeUrl: z.string().describe('预约小程序码图片地址'),
+});
+export type OrderResult = z.infer<typeof OrderResult>;
+
+export const OrderEnvelope = z.object({
+  code: z.number().describe('业务码'),
+  data: OrderResult,
+  msg: z.string().describe('消息'),
+});
+export type OrderEnvelope = z.infer<typeof OrderEnvelope>;

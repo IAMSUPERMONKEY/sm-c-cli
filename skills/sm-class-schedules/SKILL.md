@@ -1,20 +1,27 @@
 ---
 name: sm-class-schedules
-description: Use when a user asks about SUPERMONKEY (超级猩猩) group class schedules, wants to find or browse 团课 课表 within the next 9 days by city plus one or more keywords (studio, class name, coach), or check class details such as date, time, studio, class name, coach, and price. Triggers on 超级猩猩 / 团课 / 课表.
+description: 'SUPERMONKEY（超级猩猩）团课课表：提供超级猩猩团课课表的查询/搜索、与获取课表预约码（帮助约课）能力。'
+metadata:
+  requires:
+    bins: ['sm-c-cli']
+  cliHelp: 'sm-c-cli class-schedules --help'
 ---
 
 # SUPERMONKEY 团课课表
 
-通过 `sm-c-cli` 查询 SUPERMONKEY 团课课表。当前支持按 **城市 + 关键词（门店 / 课程 / 教练，可组合多个）** 搜索，可选限定日期。
+通过 `sm-c-cli class-schedules` 查询 SUPERMONKEY 团课课表，并获取指定课表的预约小程序码。当前提供两个 Shortcut：
 
-## 查询窗口（重要）
+- `+search`：按 **城市 + 关键词（门店 / 课程 / 教练，可组合）** 搜索未来 9 天内的课表，可选限定日期。
+- `+order`：根据课表 id（`scheduleId` + `scheduleIdSk`）获取该课表的微信小程序**预约码图片地址**。两个字段都来自 `+search` 的返回结果。
+
+## Shortcut：+search（搜索课表）
+
+### 查询窗口（重要）
 
 - **仅支持查询当前时间起 9 天内的课表**，不支持历史课表。
 - 如果用户要查的日期早于今天，直接告知"暂不支持查询历史课表"，不要发起请求。
 - 如果用户要查的日期超出 9 天窗口，直接告知"仅支持查询未来 9 天内的课表"，不要发起请求。
 - 如果用户明确要看「某一天」或「某几天」的课，使用 `--date` 参数**分多次查询**（每次只能传一个日期）。
-
-## 命令
 
 ```
 sm-c-cli class-schedules +search --city "<城市>" --keyword "<关键词>" [--date "YYYY-MM-DD"]
@@ -33,34 +40,29 @@ sm-c-cli class-schedules +search --city "<城市>" --keyword "<关键词>" [--da
   - 用户同时给出多个维度（如门店 + 教练、门店 + 课程）时，把它们拼接到同一个 `--keyword` 中，整体加双引号。
 - `--date`（可选）：限定日期，格式 `YYYY-MM-DD`，必须在「今天起 9 天内」。不传则返回当前查询窗口内的全部课表。
 
-## 使用示例
+### 使用示例
 
-查某城市单维度关键词的课表：
+按城市 + 单维度关键词查询：
 
 ```
 sm-c-cli class-schedules +search --city "上海市" --keyword "<课程名>"
 ```
 
-按门店 + 教练组合查询某门店某教练的课表：
+按门店 + 教练组合查询：
 
 ```
 sm-c-cli class-schedules +search --city "上海市" --keyword "<门店名> <教练名>"
 ```
 
-按门店 + 课程组合查询某门店某课程在指定日期的课表：
+按门店 + 课程组合查询，并限定日期：
 
 ```
-sm-c-cli class-schedules +search --city "上海市" --keyword "<门店名> <课程名>" --date "2026-05-01"
+sm-c-cli class-schedules +search --city "上海市" --keyword "<门店名> <课程名>" --date "2026-05-08"
 ```
 
-## 输出契约
+### 返回字段
 
-stdout 统一是 `{ code, data, msg }` 信封：
-
-- 成功：`code === 0`，`data.list` 是课表数组。
-- 失败：`code !== 0`，`msg` 是人类可读的错误信息；同时 stderr 也会再写一份。
-
-向用户呈现每条课表时，至少包含以下字段：
+stdout 是 `{ code, data, msg }` 信封；成功时 `data.list` 是课表数组。向用户呈现每条课表时，至少包含以下字段：
 
 | 字段                    | 含义            |
 | ----------------------- | --------------- |
@@ -70,6 +72,38 @@ stdout 统一是 `{ code, data, msg }` 信封：
 | `className`             | 课程名          |
 | `trainerName`           | 教练            |
 | `price`                 | 价格            |
+
+## Shortcut：+order（获取课表预约小程序码）
+
+```
+sm-c-cli class-schedules +order --schedule-id "<scheduleId>" --schedule-id-sk "<scheduleIdSk>"
+```
+
+参数：
+
+- `--schedule-id`（必填）：课表 id，正整数。对应 `+search` 返回结果中的 `scheduleId`。
+- `--schedule-id-sk`（必填）：课表 id 校验串。对应 `+search` 返回结果中的 `scheduleIdSk`。
+
+> **数据来源约束**：`scheduleId` 与 `scheduleIdSk` 必须来自**同一条** `+search` 返回结果，不要跨课表拼接，也不要让用户手填或自行构造；这两个字段不必展示给用户，由内部从 `+search` 结果中取出后直接传入即可。
+
+### 使用示例
+
+```
+sm-c-cli class-schedules +order --schedule-id "1234567" --schedule-id-sk "abcdef..."
+```
+
+### 返回字段
+
+stdout 是 `{ code, data, msg }` 信封；成功时 `data.codeUrl` 是该课表的微信小程序预约码图片 URL。把 `codeUrl` 直接给用户即可（可作为图片链接展示）。
+
+## 编排：从搜索到预约
+
+当用户的意图包含「想约某节课 / 把预约码发我」时，按以下顺序编排两个 shortcut：
+
+1. **Step 1**：先用 `+search` 定位用户想约的课表，从返回的 `data.list` 中确认目标课表。
+   - 若结果多于 1 条，先把候选课表（日期、时间、门店、课程、教练）展示给用户，**等用户确认**具体哪一节，不要擅自挑选。
+   - 若结果为 0 条，向用户反馈"未找到匹配课表"，不要进入下一步。
+2. **Step 2**：拿目标课表的 `scheduleId` + `scheduleIdSk` 调 `+order`，把返回的 `codeUrl` 给用户。
 
 ## 参数推断指引
 
@@ -82,8 +116,17 @@ stdout 统一是 `{ code, data, msg }` 信封：
 - **多日期分多次查询**。用户要看「这周三和周五」等多个具体日期时，对每个日期分别调用一次 `--date`，再合并结果给用户。
 - 用户说"最近的课 / 这几天的课"且没指定具体日期时，**不要传** `--date`，让接口返回当前 9 天窗口的全部数据。
 
+## 输出契约
+
+stdout 统一是 `{ code, data, msg }` 信封：
+
+- 成功：`code === 0`。
+  - `+search`：`data.list` 是课表数组。
+  - `+order`：`data.codeUrl` 是预约小程序码图片地址。
+- 失败：`code !== 0`，`msg` 是人类可读错误信息；同时 stderr 也会再写一份。
+
 ## 错误处理
 
 - 信封里 `code !== 0` 即视为失败。把 `msg` 转述给用户，不要自行编造原因。
 - 退出码非 0 时，先看 stdout 的信封 `msg`，再看 stderr 的补充信息。
-- **出现错误时如实报告给用户，不要假想 / 猜测 / 编造课表数据**。宁可告诉用户"查询失败"，也不要返回任何未经接口确认的课程信息。
+- **出现错误时如实报告给用户，不要假想 / 猜测 / 编造课表数据或预约码地址**。宁可告诉用户"查询失败"，也不要返回任何未经接口确认的课程信息或图片链接。
