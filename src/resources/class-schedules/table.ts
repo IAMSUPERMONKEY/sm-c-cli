@@ -1,6 +1,6 @@
 import Table from 'cli-table3';
 import pc from 'picocolors';
-import { labelOf } from '../../shared/schema-meta.js';
+import { labelOf } from '@/shared/schema-meta.js';
 import { ClassSchedule, type ClassSchedule as ClassScheduleType } from './schema.js';
 
 export function renderClassSchedulesTable(list: ClassScheduleType[]): string {

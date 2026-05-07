@@ -1,7 +1,8 @@
 import type { Command } from 'commander';
 import { z } from 'zod';
-import { OrderInput, type OrderResult } from './schema.js';
-import { getClassScheduleOrderCode } from './api.js';
+import { SearchInput, type SearchResult } from './schema.js';
+import { searchBoxes } from './api.js';
+import { renderBoxesTable } from './table.js';
 import { ok, fail } from '@/shared/envelope.js';
 import { writeEnvelope, parseFormat, type Format } from '@/shared/output.js';
 import { exitCodeOf } from '@/shared/exit-codes.js';
@@ -10,15 +11,14 @@ import { CliError } from '@/shared/errors.js';
 import { toCliError } from '@/shared/http/errors.js';
 import { formatZodError } from '@/shared/zod-errors.js';
 
-export function registerOrder(parent: Command): void {
+export function registerSearch(parent: Command): void {
   parent
-    .command('+order')
-    .description('根据课表 id 获取该课表的预约小程序码图片地址')
-    .requiredOption('--schedule-id <scheduleId>', '课表 id（对应 +search 返回的 scheduleId）')
-    .requiredOption(
-      '--schedule-id-sk <scheduleIdSk>',
-      '课表 id 验证（对应 +search 返回的 scheduleIdSk）',
-    )
+    .command('+search')
+    .description('按经纬度或地理位置描述搜索附近的门店')
+    .option('--lng <lng>', '经度（与 --lat 配套）')
+    .option('--lat <lat>', '纬度（与 --lng 配套）')
+    .option('--location <location>', '地理位置描述，如「上海市静安区静安寺」')
+    .option('--type <type>', '门店业态过滤，目前仅支持 class（团课）')
     .action(async (opts: Record<string, unknown>, cmd: Command) => {
       const root = cmd.parent?.parent;
       const rawFormat = (root?.opts().format as string | undefined) ?? 'json';
@@ -36,15 +36,17 @@ export function registerOrder(parent: Command): void {
       }
 
       try {
-        const input = OrderInput.parse({
-          scheduleId: opts.scheduleId,
-          scheduleIdSk: opts.scheduleIdSk,
+        const input = SearchInput.parse({
+          lng: opts.lng,
+          lat: opts.lat,
+          location: opts.location,
+          type: opts.type,
         });
         debug('input', input);
-        const data = await getClassScheduleOrderCode(input);
+        const data = await searchBoxes(input);
         const env = ok(data);
         writeEnvelope(env, format, {
-          table: (d: OrderResult) => d.codeUrl,
+          table: (d: SearchResult) => renderBoxesTable(d.list),
         });
         process.exit(exitCodeOf(env.code));
       } catch (err) {

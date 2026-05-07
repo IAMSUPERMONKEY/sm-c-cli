@@ -1,6 +1,6 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { getClassScheduleOrderCode, searchClassSchedules } from '../api.js';
-import { getHttpClient } from '../../../shared/http/client.js';
+import { getHttpClient } from '@/shared/http/client.js';
 import type { ClassSchedule } from '../schema.js';
 
 vi.mock('../../../shared/http/client.js', () => ({

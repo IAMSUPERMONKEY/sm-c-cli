@@ -1,7 +1,7 @@
-import { getHttpClient } from '../../shared/http/client.js';
-import { API_PATHS } from '../../shared/api-paths.js';
-import { fetchAllPages } from '../../shared/pagination.js';
-import { CliError } from '../../shared/errors.js';
+import { getHttpClient } from '@/shared/http/client.js';
+import { API_PATHS } from '@/shared/api-paths.js';
+import { fetchAllPages } from '@/shared/pagination.js';
+import { CliError } from '@/shared/errors.js';
 import {
   OrderEnvelope,
   SearchPageEnvelope,

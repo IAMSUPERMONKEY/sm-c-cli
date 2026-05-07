@@ -3,12 +3,13 @@ import { z } from 'zod';
 import { SearchInput, type SearchResult } from './schema.js';
 import { searchClassSchedules } from './api.js';
 import { renderClassSchedulesTable } from './table.js';
-import { ok, fail } from '../../shared/envelope.js';
-import { writeEnvelope, parseFormat, type Format } from '../../shared/output.js';
-import { exitCodeOf } from '../../shared/exit-codes.js';
-import { setVerbose, debug } from '../../shared/logger.js';
-import { CliError } from '../../shared/errors.js';
-import { toCliError } from '../../shared/http/errors.js';
+import { ok, fail } from '@/shared/envelope.js';
+import { writeEnvelope, parseFormat, type Format } from '@/shared/output.js';
+import { exitCodeOf } from '@/shared/exit-codes.js';
+import { setVerbose, debug } from '@/shared/logger.js';
+import { CliError } from '@/shared/errors.js';
+import { toCliError } from '@/shared/http/errors.js';
+import { formatZodError } from '@/shared/zod-errors.js';
 
 export function registerSearch(parent: Command): void {
   parent
@@ -49,7 +50,7 @@ export function registerSearch(parent: Command): void {
       } catch (err) {
         const cliErr =
           err instanceof z.ZodError
-            ? new CliError(40001, err.issues[0]?.message ?? 'invalid argument')
+            ? new CliError(40001, formatZodError(err))
             : toCliError(err);
         const env = fail(cliErr.code, cliErr.message);
         writeEnvelope(env, format);

@@ -1,4 +1,8 @@
 import { defineConfig } from 'tsup';
+import { fileURLToPath } from 'node:url';
+import { dirname, resolve } from 'node:path';
+
+const here = dirname(fileURLToPath(import.meta.url));
 
 export default defineConfig({
   entry: ['src/index.ts'],
@@ -10,4 +14,10 @@ export default defineConfig({
   clean: true,
   shims: false,
   banner: { js: '#!/usr/bin/env node' },
+  esbuildOptions(options) {
+    options.alias = {
+      ...options.alias,
+      '@': resolve(here, 'src'),
+    };
+  },
 });
