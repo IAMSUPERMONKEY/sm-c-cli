@@ -1,20 +1,18 @@
 import { describe, it, expect } from 'vitest';
-import { LocationsSearchInput, Location } from '../schema.js';
+import { GeocodeInput, Location } from '../schema.js';
 
-describe('boxes locations SearchInput', () => {
+describe('boxes locations GeocodeInput', () => {
   it('传入 keyword 时通过校验', () => {
-    const parsed = LocationsSearchInput.parse({ keyword: '海岸城' });
+    const parsed = GeocodeInput.parse({ keyword: '海岸城' });
     expect(parsed).toEqual({ keyword: '海岸城' });
   });
 
   it('缺少 keyword 时报错', () => {
-    expect(() => LocationsSearchInput.parse({})).toThrow(/--keyword/);
+    expect(() => GeocodeInput.parse({})).toThrow(/--keyword/);
   });
 
   it('keyword 为空字符串时报错', () => {
-    expect(() => LocationsSearchInput.parse({ keyword: '' })).toThrow(
-      /--keyword/,
-    );
+    expect(() => GeocodeInput.parse({ keyword: '' })).toThrow(/--keyword/);
   });
 });
 

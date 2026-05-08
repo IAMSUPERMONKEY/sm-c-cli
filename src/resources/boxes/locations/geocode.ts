@@ -1,7 +1,7 @@
 import type { Command } from 'commander';
 import { z } from 'zod';
-import { LocationsSearchInput, type LocationsSearchResult } from './schema.js';
-import { searchLocations } from './api.js';
+import { GeocodeInput, type GeocodeResult } from './schema.js';
+import { geocodeLocation } from './api.js';
 import { renderLocationsTable } from './table.js';
 import { ok, fail } from '@/shared/envelope.js';
 import { writeEnvelope, parseFormat, type Format } from '@/shared/output.js';
@@ -17,10 +17,10 @@ function rootOf(cmd: Command): Command {
   return curr;
 }
 
-export function registerLocationsSearch(parent: Command): void {
+export function registerLocationsGeocode(parent: Command): void {
   parent
-    .command('search')
-    .description('按关键词搜索候选地址（含经纬度）')
+    .command('geocode')
+    .description('将地理位置描述转换为候选地址（含经纬度）')
     .requiredOption('--keyword <keyword>', '地理位置描述，如「海岸城」')
     .action(async (opts: Record<string, unknown>, cmd: Command) => {
       const root = rootOf(cmd);
@@ -39,12 +39,12 @@ export function registerLocationsSearch(parent: Command): void {
       }
 
       try {
-        const input = LocationsSearchInput.parse({ keyword: opts.keyword });
+        const input = GeocodeInput.parse({ keyword: opts.keyword });
         debug('input', input);
-        const data = await searchLocations(input);
+        const data = await geocodeLocation(input);
         const env = ok(data);
         writeEnvelope(env, format, {
-          table: (d: LocationsSearchResult) => renderLocationsTable(d.list),
+          table: (d: GeocodeResult) => renderLocationsTable(d.list),
         });
         process.exit(exitCodeOf(env.code));
       } catch (err) {

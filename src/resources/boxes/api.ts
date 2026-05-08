@@ -10,15 +10,11 @@ import {
 export async function searchBoxes(input: SearchInput): Promise<SearchResult> {
   const client = getHttpClient();
 
-  const body: Record<string, unknown> = {
+  const res = await client.post(API_PATHS.boxesSearchByGeo, {
     longitude: input.longitude,
     latitude: input.latitude,
-  };
-  if (input.type !== undefined) {
-    body.type = input.type;
-  }
-
-  const res = await client.post(API_PATHS.boxesSearch, body);
+    distance: 10000,
+  });
   const env = SearchEnvelope.parse(res.data);
   if (env.code !== 0) {
     throw new CliError(env.code, env.msg || `upstream error: code ${env.code}`);

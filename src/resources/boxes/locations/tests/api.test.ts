@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { searchLocations } from '../api.js';
+import { geocodeLocation } from '../api.js';
 import { getHttpClient } from '@/shared/http/client.js';
 
 vi.mock('../../../../shared/http/client.js', () => ({
@@ -19,7 +19,7 @@ function loc(overrides: Record<string, string> = {}) {
   };
 }
 
-describe('searchLocations', () => {
+describe('geocodeLocation', () => {
   const post = vi.fn();
 
   beforeEach(() => {
@@ -32,7 +32,7 @@ describe('searchLocations', () => {
       data: { code: 0, msg: 'success', data: { list: [loc()] } },
     });
 
-    await searchLocations({ keyword: '海岸城' });
+    await geocodeLocation({ keyword: '海岸城' });
 
     expect(post).toHaveBeenCalledTimes(1);
     expect(post).toHaveBeenCalledWith('/boxes/geo', { location: '海岸城' });
@@ -52,7 +52,7 @@ describe('searchLocations', () => {
       },
     });
 
-    const result = await searchLocations({ keyword: '海岸城' });
+    const result = await geocodeLocation({ keyword: '海岸城' });
 
     expect(result.list).toHaveLength(2);
     expect(result.list.map((l) => l.city)).toEqual(['深圳市', '厦门市']);
@@ -63,7 +63,7 @@ describe('searchLocations', () => {
       data: { code: 30001, msg: 'geo busted', data: { list: [] } },
     });
 
-    await expect(searchLocations({ keyword: '海岸城' })).rejects.toMatchObject({
+    await expect(geocodeLocation({ keyword: '海岸城' })).rejects.toMatchObject({
       code: 30001,
       message: 'geo busted',
     });
@@ -74,7 +74,7 @@ describe('searchLocations', () => {
       data: { code: 0, msg: 'success', data: { list: [] } },
     });
 
-    const result = await searchLocations({ keyword: '不存在的位置' });
+    const result = await geocodeLocation({ keyword: '不存在的位置' });
 
     expect(result.list).toEqual([]);
   });

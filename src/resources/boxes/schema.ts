@@ -11,7 +11,6 @@ const nonEmptyString = (label: string) =>
 export const SearchInput = z.object({
   longitude: nonEmptyString('--longitude').describe('经度'),
   latitude: nonEmptyString('--latitude').describe('纬度'),
-  type: BoxBizType.optional().describe('业态过滤'),
 });
 export type SearchInput = z.infer<typeof SearchInput>;
 

@@ -13,11 +13,10 @@ import { formatZodError } from '@/shared/zod-errors.js';
 
 export function registerSearch(parent: Command): void {
   parent
-    .command('+search')
+    .command('+search-by-geo')
     .description('按经纬度搜索附近的门店')
     .requiredOption('--longitude <longitude>', '经度')
     .requiredOption('--latitude <latitude>', '纬度')
-    .option('--type <type>', '门店业态过滤，目前仅支持 class（团课）')
     .action(async (opts: Record<string, unknown>, cmd: Command) => {
       const root = cmd.parent?.parent;
       const rawFormat = (root?.opts().format as string | undefined) ?? 'json';
@@ -38,7 +37,6 @@ export function registerSearch(parent: Command): void {
         const input = SearchInput.parse({
           longitude: opts.longitude,
           latitude: opts.latitude,
-          type: opts.type,
         });
         debug('input', input);
         const data = await searchBoxes(input);

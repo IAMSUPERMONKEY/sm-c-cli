@@ -33,26 +33,22 @@ describe('searchBoxes', () => {
     vi.mocked(getHttpClient).mockReturnValue({ post } as never);
   });
 
-  it('以 POST 方式请求 /boxes/search，并以字符串形式发送 longitude/latitude', async () => {
+  it('以 POST 方式请求 /boxes/searchByGeo，请求体携带字符串经纬度并固定 distance=10000', async () => {
     post.mockResolvedValueOnce({
       data: { code: 0, msg: 'success', data: { list: [box()] } },
     });
 
-    await searchBoxes({
-      longitude: '121.45',
-      latitude: '31.22',
-      type: 'class',
-    });
+    await searchBoxes({ longitude: '121.45', latitude: '31.22' });
 
     expect(post).toHaveBeenCalledTimes(1);
-    expect(post).toHaveBeenCalledWith('/boxes/search', {
+    expect(post).toHaveBeenCalledWith('/boxes/searchByGeo', {
       longitude: '121.45',
       latitude: '31.22',
-      type: 'class',
+      distance: 10000,
     });
   });
 
-  it('未传 type 时，请求体不携带 type 字段', async () => {
+  it('请求体不再携带 type 字段', async () => {
     post.mockResolvedValueOnce({
       data: { code: 0, msg: 'success', data: { list: [] } },
     });

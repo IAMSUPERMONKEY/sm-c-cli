@@ -10,19 +10,6 @@ describe('boxes SearchInput', () => {
     expect(parsed).toEqual({ longitude: '121.45', latitude: '31.22' });
   });
 
-  it('传入 type=class 时保留', () => {
-    const parsed = SearchInput.parse({
-      longitude: '121.45',
-      latitude: '31.22',
-      type: 'class',
-    });
-    expect(parsed).toEqual({
-      longitude: '121.45',
-      latitude: '31.22',
-      type: 'class',
-    });
-  });
-
   it('缺少 longitude 时报错', () => {
     expect(() => SearchInput.parse({ latitude: '31.22' })).toThrow(
       /--longitude/,
@@ -45,16 +32,6 @@ describe('boxes SearchInput', () => {
     expect(() =>
       SearchInput.parse({ longitude: '121.45', latitude: '' }),
     ).toThrow(/--latitude/);
-  });
-
-  it('type 为非 class 字面量时报错', () => {
-    expect(() =>
-      SearchInput.parse({
-        longitude: '121.45',
-        latitude: '31.22',
-        type: 'private',
-      }),
-    ).toThrow(/invalid_value/);
   });
 });
 

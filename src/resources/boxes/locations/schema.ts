@@ -5,10 +5,10 @@ const nonEmptyString = (label: string) =>
     .string({ message: `${label} is required` })
     .min(1, { message: `${label} is required` });
 
-export const LocationsSearchInput = z.object({
+export const GeocodeInput = z.object({
   keyword: nonEmptyString('--keyword').describe('地理位置描述'),
 });
-export type LocationsSearchInput = z.infer<typeof LocationsSearchInput>;
+export type GeocodeInput = z.infer<typeof GeocodeInput>;
 
 export const Location = z.object({
   address: z.string().describe('地址'),
@@ -21,17 +21,17 @@ export const Location = z.object({
 });
 export type Location = z.infer<typeof Location>;
 
-export const LocationsSearchData = z.object({
+export const GeocodeData = z.object({
   list: z.array(Location).describe('候选地址列表'),
 });
-export type LocationsSearchData = z.infer<typeof LocationsSearchData>;
+export type GeocodeData = z.infer<typeof GeocodeData>;
 
-export const LocationsSearchEnvelope = z.object({
+export const GeocodeEnvelope = z.object({
   code: z.number().describe('业务码'),
-  data: LocationsSearchData,
+  data: GeocodeData,
   msg: z.string().describe('消息'),
 });
-export type LocationsSearchEnvelope = z.infer<typeof LocationsSearchEnvelope>;
+export type GeocodeEnvelope = z.infer<typeof GeocodeEnvelope>;
 
-export const LocationsSearchResult = LocationsSearchData;
-export type LocationsSearchResult = z.infer<typeof LocationsSearchResult>;
+export const GeocodeResult = GeocodeData;
+export type GeocodeResult = z.infer<typeof GeocodeResult>;
