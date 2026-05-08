@@ -33,43 +33,23 @@ describe('searchBoxes', () => {
     vi.mocked(getHttpClient).mockReturnValue({ post } as never);
   });
 
-  it('以 POST 方式请求 /boxes/search，并把 lng/lat 映射成 longitude/latitude', async () => {
+  it('以 POST 方式请求 /boxes/search，并以字符串形式发送 longitude/latitude', async () => {
     post.mockResolvedValueOnce({
       data: { code: 0, msg: 'success', data: { list: [box()] } },
     });
 
-    await searchBoxes({ lng: 121.45, lat: 31.22, type: 'class' });
+    await searchBoxes({
+      longitude: '121.45',
+      latitude: '31.22',
+      type: 'class',
+    });
 
     expect(post).toHaveBeenCalledTimes(1);
     expect(post).toHaveBeenCalledWith('/boxes/search', {
-      longitude: 121.45,
-      latitude: 31.22,
+      longitude: '121.45',
+      latitude: '31.22',
       type: 'class',
     });
-  });
-
-  it('只传 location 时，请求体只携带 location，不带 longitude/latitude', async () => {
-    post.mockResolvedValueOnce({
-      data: { code: 0, msg: 'success', data: { list: [] } },
-    });
-
-    await searchBoxes({ location: '上海市静安区静安寺' });
-
-    expect(post).toHaveBeenCalledWith('/boxes/search', {
-      location: '上海市静安区静安寺',
-    });
-  });
-
-  it('同时提供经纬度与 location 时以经纬度为准、忽略 location', async () => {
-    post.mockResolvedValueOnce({
-      data: { code: 0, msg: 'success', data: { list: [] } },
-    });
-
-    await searchBoxes({ lng: 121.45, lat: 31.22, location: '上海' });
-
-    const body = post.mock.calls[0]![1] as Record<string, unknown>;
-    expect(body).toEqual({ longitude: 121.45, latitude: 31.22 });
-    expect(body).not.toHaveProperty('location');
   });
 
   it('未传 type 时，请求体不携带 type 字段', async () => {
@@ -77,7 +57,7 @@ describe('searchBoxes', () => {
       data: { code: 0, msg: 'success', data: { list: [] } },
     });
 
-    await searchBoxes({ location: '上海' });
+    await searchBoxes({ longitude: '121.45', latitude: '31.22' });
 
     expect(post.mock.calls[0]![1]).not.toHaveProperty('type');
   });
@@ -91,7 +71,10 @@ describe('searchBoxes', () => {
       },
     });
 
-    const result = await searchBoxes({ location: '上海' });
+    const result = await searchBoxes({
+      longitude: '121.45',
+      latitude: '31.22',
+    });
 
     expect(result.list.map((b) => b.boxId)).toEqual([1, 2]);
   });
@@ -101,9 +84,41 @@ describe('searchBoxes', () => {
       data: { code: 30000, msg: 'upstream busted', data: { list: [] } },
     });
 
-    await expect(searchBoxes({ location: '上海' })).rejects.toMatchObject({
+    await expect(
+      searchBoxes({ longitude: '121.45', latitude: '31.22' }),
+    ).rejects.toMatchObject({
       code: 30000,
       message: 'upstream busted',
     });
+  });
+
+  it('返回结果按距离正序排序（跨米/千米单位也能正确比较）', async () => {
+    post.mockResolvedValueOnce({
+      data: {
+        code: 0,
+        msg: 'success',
+        data: {
+          list: [
+            box({ boxId: 1, distance: 2500 }),
+            box({ boxId: 2, distance: 300 }),
+            box({ boxId: 3, distance: 1200 }),
+            box({ boxId: 4, distance: 999 }),
+          ],
+        },
+      },
+    });
+
+    const result = await searchBoxes({
+      longitude: '121.45',
+      latitude: '31.22',
+    });
+
+    expect(result.list.map((b) => b.boxId)).toEqual([2, 4, 3, 1]);
+    expect(result.list.map((b) => b.distance)).toEqual([
+      '300m',
+      '999m',
+      '1.2km',
+      '2.5km',
+    ]);
   });
 });

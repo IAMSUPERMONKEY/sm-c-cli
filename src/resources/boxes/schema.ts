@@ -3,61 +3,16 @@ import { z } from 'zod';
 export const BoxBizType = z.enum(['class']).describe('业态');
 export type BoxBizType = z.infer<typeof BoxBizType>;
 
-const numberLike = (label: string) =>
-  z.union([z.string(), z.number()]).transform((v, ctx) => {
-    const n = typeof v === 'number' ? v : Number(v);
-    if (!Number.isFinite(n)) {
-      ctx.addIssue({
-        code: z.ZodIssueCode.custom,
-        message: `${label} must be a number`,
-      });
-      return z.NEVER;
-    }
-    return n;
-  });
+const nonEmptyString = (label: string) =>
+  z
+    .string({ message: `${label} is required` })
+    .min(1, { message: `${label} is required` });
 
-export const SearchInput = z
-  .object({
-    lng: numberLike('--lng').optional().describe('经度'),
-    lat: numberLike('--lat').optional().describe('纬度'),
-    location: z.string().optional().describe('地理位置描述'),
-    type: BoxBizType.optional().describe('业态过滤'),
-  })
-  .superRefine((val, ctx) => {
-    const hasLng = val.lng !== undefined;
-    const hasLat = val.lat !== undefined;
-
-    if (hasLng !== hasLat) {
-      ctx.addIssue({
-        code: z.ZodIssueCode.custom,
-        message: '--lng and --lat must be provided together',
-      });
-      return;
-    }
-
-    if (!hasLng && (val.location === undefined || val.location === '')) {
-      ctx.addIssue({
-        code: z.ZodIssueCode.custom,
-        message: 'either --lng/--lat or --location is required',
-      });
-      return;
-    }
-
-    if (hasLng) {
-      if (val.lng! < -180 || val.lng! > 180) {
-        ctx.addIssue({
-          code: z.ZodIssueCode.custom,
-          message: '--lng must be between -180 and 180',
-        });
-      }
-      if (val.lat! < -90 || val.lat! > 90) {
-        ctx.addIssue({
-          code: z.ZodIssueCode.custom,
-          message: '--lat must be between -90 and 90',
-        });
-      }
-    }
-  });
+export const SearchInput = z.object({
+  longitude: nonEmptyString('--longitude').describe('经度'),
+  latitude: nonEmptyString('--latitude').describe('纬度'),
+  type: BoxBizType.optional().describe('业态过滤'),
+});
 export type SearchInput = z.infer<typeof SearchInput>;
 
 export const Box = z.object({

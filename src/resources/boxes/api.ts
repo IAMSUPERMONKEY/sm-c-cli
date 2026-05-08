@@ -10,13 +10,10 @@ import {
 export async function searchBoxes(input: SearchInput): Promise<SearchResult> {
   const client = getHttpClient();
 
-  const body: Record<string, unknown> = {};
-  if (input.lng !== undefined && input.lat !== undefined) {
-    body.longitude = input.lng;
-    body.latitude = input.lat;
-  } else if (input.location !== undefined) {
-    body.location = input.location;
-  }
+  const body: Record<string, unknown> = {
+    longitude: input.longitude,
+    latitude: input.latitude,
+  };
   if (input.type !== undefined) {
     body.type = input.type;
   }
@@ -26,5 +23,16 @@ export async function searchBoxes(input: SearchInput): Promise<SearchResult> {
   if (env.code !== 0) {
     throw new CliError(env.code, env.msg || `upstream error: code ${env.code}`);
   }
-  return { list: env.data.list };
+
+  const sorted = [...env.data.list].sort(
+    (a, b) => parseDistanceMeters(a.distance) - parseDistanceMeters(b.distance),
+  );
+  return { list: sorted };
+}
+
+function parseDistanceMeters(distance: string): number {
+  const match = /^(-?\d+(?:\.\d+)?)(km|m)$/.exec(distance);
+  if (!match) return Number.POSITIVE_INFINITY;
+  const value = Number(match[1]);
+  return match[2] === 'km' ? value * 1000 : value;
 }

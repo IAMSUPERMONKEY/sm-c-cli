@@ -28,7 +28,7 @@ describe('formatZodError', () => {
     });
     const err = captureError(() => schema.parse({ type: 'private' }));
 
-    expect(formatZodError(err)).toMatch(/^--type: /);
+    expect(formatZodError(err)).toMatch(/^--type, /);
     expect(formatZodError(err)).toContain('expected');
   });
 
@@ -38,7 +38,7 @@ describe('formatZodError', () => {
     });
     const err = captureError(() => schema.parse({ scheduleId: '' }));
 
-    expect(formatZodError(err)).toMatch(/^--schedule-id: /);
+    expect(formatZodError(err)).toMatch(/^--schedule-id, /);
   });
 
   it('顶层 superRefine 抛出的 issue（path 为空）原样返回 message', () => {
