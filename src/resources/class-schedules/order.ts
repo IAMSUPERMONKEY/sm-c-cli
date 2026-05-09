@@ -13,7 +13,7 @@ import { formatZodError } from '@/shared/zod-errors.js';
 export function registerOrder(parent: Command): void {
   parent
     .command('+order')
-    .description('根据课表 id 获取该课表的预约小程序码图片地址')
+    .description('根据课表 id 获取该课表的预约链接地址')
     .requiredOption('--schedule-id <scheduleId>', '课表 id（对应 +search 返回的 scheduleId）')
     .requiredOption(
       '--schedule-id-sk <scheduleIdSk>',
@@ -49,9 +49,7 @@ export function registerOrder(parent: Command): void {
         process.exit(exitCodeOf(env.code));
       } catch (err) {
         const cliErr =
-          err instanceof z.ZodError
-            ? new CliError(40001, formatZodError(err))
-            : toCliError(err);
+          err instanceof z.ZodError ? new CliError(40001, formatZodError(err)) : toCliError(err);
         const env = fail(cliErr.code, cliErr.message);
         writeEnvelope(env, format);
         process.stderr.write(`${cliErr.message}\n`);

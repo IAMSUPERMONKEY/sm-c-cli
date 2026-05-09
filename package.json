@@ -1,6 +1,6 @@
 {
   "name": "sm-c-cli",
-  "version": "0.1.4",
+  "version": "0.1.9",
   "description": "SUPERMONKEY 用户端 CLI",
   "type": "module",
   "license": "UNLICENSED",
@@ -10,7 +10,7 @@
     "url": "git+ssh://git@codeup.aliyun.com/supermonkey/supermonkey-web/sm-c-cli.git"
   },
   "publishConfig": {
-    "registry": "http://npm.internal.supermonkey.com.cn:4873/"
+    "registry": "https://npm.supermonkey.cc/"
   },
   "bin": {
     "sm-c-cli": "./dist/index.js"

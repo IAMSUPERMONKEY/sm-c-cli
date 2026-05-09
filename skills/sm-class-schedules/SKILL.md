@@ -1,6 +1,6 @@
 ---
 name: sm-class-schedules
-description: 'SUPERMONKEY（超级猩猩）团课课表：提供超级猩猩团课课表的查询/搜索、与获取课表预约码（帮助约课）能力。当用户问"超级猩猩 / 课表"、"xxx 门店明天有什么课"、"xxx 教练这周哪天有课"、"xxx 课程在哪个店能上"、"最近 / 这几天有什么团课"，或者"想约这节课 / 帮我约这节课"时使用。'
+description: 'SUPERMONKEY（超级猩猩）团课课表：提供超级猩猩团课课表的查询/搜索、与获取课表预约链接地址（帮助约课）能力。当用户问"超级猩猩 / 课表"、"xxx 门店明天有什么课"、"xxx 教练这周哪天有课"、"xxx 课程在哪个店能上"、"最近 / 这几天有什么团课"，或者"想约这节课 / 帮我约这节课"时使用。'
 metadata:
   requires:
     bins: ['sm-c-cli']
@@ -12,7 +12,7 @@ metadata:
 通过 `sm-c-cli class-schedules` 查询 SUPERMONKEY 团课课表，并获取指定课表的预约小程序码。当前提供两个 Shortcut：
 
 - `+search`：按 **城市 + 关键词（门店 / 课程 / 教练，可组合）** 搜索未来 9 天内的课表，可选限定日期。
-- `+order`：根据课表 id（`scheduleId` + `scheduleIdSk`）获取该课表的微信小程序**预约码图片地址**。两个字段都来自 `+search` 的返回结果。
+- `+order`：根据课表 id（`scheduleId` + `scheduleIdSk`）获取该课表的**预约链接地址**。两个字段都来自 `+search` 的返回结果。
 
 ## Shortcut：+search（搜索课表）
 
@@ -97,7 +97,7 @@ sm-c-cli class-schedules +order --schedule-id "1234567" --schedule-id-sk "abcdef
 
 ### 返回字段
 
-stdout 是 `{ code, data, msg }` 信封；成功时 `data.codeUrl` 是该课表的微信小程序预约码图片 URL。把 `codeUrl` 直接给用户即可（可作为图片链接展示）。
+stdout 是 `{ code, data, msg }` 信封；成功时 `data.codeUrl` 是该课表的预约链接地址。把 `codeUrl` 以超链接形式发送给用户，并告知用户点击链接可约课。
 
 ## 输出契约
 
