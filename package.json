@@ -1,6 +1,6 @@
 {
   "name": "sm-c-cli",
-  "version": "0.1.9",
+  "version": "0.1.10",
   "description": "SUPERMONKEY 用户端 CLI",
   "type": "module",
   "license": "UNLICENSED",
