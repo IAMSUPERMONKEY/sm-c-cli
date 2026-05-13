@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { Box, SearchInput } from '../schema.js';
+import { Box, SearchInput, SearchByKeywordInput } from '../schema.js';
 
 describe('boxes SearchInput', () => {
   it('同时传入 longitude 和 latitude 时通过校验', () => {
@@ -69,5 +69,23 @@ describe('boxes Box.distance 格式化', () => {
 
   it('米数有小数时同样保留 1 位', () => {
     expect(Box.parse(rawBox(123.45)).distance).toBe('123.5m');
+  });
+});
+
+describe('boxes SearchByKeywordInput', () => {
+  it('传入非空 keyword 时通过校验', () => {
+    expect(SearchByKeywordInput.parse({ keyword: '深圳 单车' })).toEqual({
+      keyword: '深圳 单车',
+    });
+  });
+
+  it('缺少 keyword 时报错', () => {
+    expect(() => SearchByKeywordInput.parse({})).toThrow(/--keyword/);
+  });
+
+  it('keyword 为空字符串时报错', () => {
+    expect(() => SearchByKeywordInput.parse({ keyword: '' })).toThrow(
+      /--keyword/,
+    );
   });
 });

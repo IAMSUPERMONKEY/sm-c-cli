@@ -14,6 +14,11 @@ export const SearchInput = z.object({
 });
 export type SearchInput = z.infer<typeof SearchInput>;
 
+export const SearchByKeywordInput = z.object({
+  keyword: nonEmptyString('--keyword').describe('关键字'),
+});
+export type SearchByKeywordInput = z.infer<typeof SearchByKeywordInput>;
+
 export const Box = z.object({
   boxId: z.number().describe('门店 id'),
   boxIdSk: z.string(),
@@ -52,3 +57,30 @@ export type SearchEnvelope = z.infer<typeof SearchEnvelope>;
 
 export const SearchResult = SearchData;
 export type SearchResult = z.infer<typeof SearchResult>;
+
+export const BoxByKeyword = z.object({
+  boxId: z.number().describe('门店 id'),
+  boxIdSk: z.string(),
+  brandName: z.string().describe('品牌'),
+  boxName: z.string().describe('门店'),
+  city: z.string().describe('城市'),
+  district: z.string().describe('区域'),
+  address: z.string().describe('地址'),
+  addressGuide: z.string().describe('到店指引'),
+});
+export type BoxByKeyword = z.infer<typeof BoxByKeyword>;
+
+export const SearchByKeywordData = z.object({
+  list: z.array(BoxByKeyword).describe('门店列表'),
+});
+export type SearchByKeywordData = z.infer<typeof SearchByKeywordData>;
+
+export const SearchByKeywordEnvelope = z.object({
+  code: z.number().describe('业务码'),
+  data: SearchByKeywordData,
+  msg: z.string().describe('消息'),
+});
+export type SearchByKeywordEnvelope = z.infer<typeof SearchByKeywordEnvelope>;
+
+export const SearchByKeywordResult = SearchByKeywordData;
+export type SearchByKeywordResult = z.infer<typeof SearchByKeywordResult>;

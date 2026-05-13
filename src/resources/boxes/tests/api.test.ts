@@ -1,8 +1,8 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import type { z } from 'zod';
-import { searchBoxes } from '../api.js';
+import { searchBoxes, searchBoxesByKeyword } from '../api.js';
 import { getHttpClient } from '@/shared/http/client.js';
-import type { Box } from '../schema.js';
+import type { Box, BoxByKeyword } from '../schema.js';
 
 vi.mock('../../../shared/http/client.js', () => ({
   getHttpClient: vi.fn(),
@@ -116,5 +116,78 @@ describe('searchBoxes', () => {
       '1.2km',
       '2.5km',
     ]);
+  });
+});
+
+type RawBoxByKeyword = z.input<typeof BoxByKeyword>;
+
+function boxByKeyword(overrides: Partial<RawBoxByKeyword> = {}): RawBoxByKeyword {
+  return {
+    boxId: 1568,
+    boxIdSk: 'a38d32a7',
+    brandName: '单车店',
+    boxName: '福田cocopark单车店',
+    city: '深圳市',
+    district: '福田区',
+    address: '广东省深圳市福田区福华三路269号福田星河cocopark二期2楼L2-050/051号商铺',
+    addressGuide: 'https://mp.weixin.qq.com/s/oU264qGic6pVZYV5P9pFLg',
+    ...overrides,
+  };
+}
+
+describe('searchBoxesByKeyword', () => {
+  const post = vi.fn();
+
+  beforeEach(() => {
+    post.mockReset();
+    vi.mocked(getHttpClient).mockReturnValue({ post } as never);
+  });
+
+  it('以 POST 方式请求 /boxes/search，请求体携带 k 字段', async () => {
+    post.mockResolvedValueOnce({
+      data: { code: 0, msg: 'success', data: { list: [boxByKeyword()] } },
+    });
+
+    await searchBoxesByKeyword({ keyword: '深圳 单车' });
+
+    expect(post).toHaveBeenCalledTimes(1);
+    expect(post).toHaveBeenCalledWith('/boxes/search', { k: '深圳 单车' });
+  });
+
+  it('成功时返回 data.list', async () => {
+    post.mockResolvedValueOnce({
+      data: {
+        code: 0,
+        msg: 'success',
+        data: {
+          list: [boxByKeyword({ boxId: 1 }), boxByKeyword({ boxId: 2 })],
+        },
+      },
+    });
+
+    const result = await searchBoxesByKeyword({ keyword: '深圳' });
+
+    expect(result.list.map((b) => b.boxId)).toEqual([1, 2]);
+  });
+
+  it('上游返回空列表时同样以成功信封返回空数组', async () => {
+    post.mockResolvedValueOnce({
+      data: { code: 0, msg: 'success', data: { list: [] } },
+    });
+
+    const result = await searchBoxesByKeyword({ keyword: '长沙' });
+
+    expect(result).toEqual({ list: [] });
+  });
+
+  it('上游信封 code 非 0 时抛出 CliError', async () => {
+    post.mockResolvedValueOnce({
+      data: { code: 30000, msg: 'upstream busted', data: { list: [] } },
+    });
+
+    await expect(searchBoxesByKeyword({ keyword: '深圳' })).rejects.toMatchObject({
+      code: 30000,
+      message: 'upstream busted',
+    });
   });
 });
