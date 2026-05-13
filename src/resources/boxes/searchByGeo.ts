@@ -11,7 +11,7 @@ import { CliError } from '@/shared/errors.js';
 import { toCliError } from '@/shared/http/errors.js';
 import { formatZodError } from '@/shared/zod-errors.js';
 
-export function registerSearch(parent: Command): void {
+export function registerSearchByGeo(parent: Command): void {
   parent
     .command('+search-by-geo')
     .description('按经纬度搜索附近的门店')
