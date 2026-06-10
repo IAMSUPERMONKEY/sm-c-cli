@@ -8,7 +8,6 @@ const pkg = JSON.parse(readFileSync(resolve(here, '../package.json'), 'utf8')) a
   version: string;
 };
 
-export const PKG_NAME = pkg.name;
 export const PKG_VERSION = pkg.version;
 
 export const API_BASE_URL = process.env.SM_C_CLI_API_BASE_URL ?? 'https://ai-cli.supermonkey.cc';

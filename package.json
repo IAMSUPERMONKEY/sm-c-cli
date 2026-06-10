@@ -1,7 +1,7 @@
 {
-  "name": "sm-c-cli",
-  "version": "0.1.13",
-  "description": "SUPERMONKEY 用户端 CLI",
+  "name": "@supermonkey/cli",
+  "version": "0.1.15",
+  "description": "SUPERMONKEY 官方 CLI",
   "type": "module",
   "license": "UNLICENSED",
   "author": "deepfunc <xiekai0601@gmail.com>",

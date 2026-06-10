@@ -1,6 +1,6 @@
 ---
 name: sm-class-schedules
-description: 'SUPERMONKEY（超级猩猩）团课课表：提供超级猩猩团课课表的查询/搜索、与获取课表预约链接地址（帮助约课）能力。当用户问"超级猩猩 / 课表"、"xxx 门店明天有什么课"、"xxx 教练这周哪天有课"、"xxx 课程在哪个店能上"、"最近 / 这几天有什么团课"，或者"想约这节课 / 帮我约这节课"时使用。'
+description: SUPERMONKEY（超级猩猩）团课课表：提供超级猩猩团课课表的查询/搜索、与获取课表预约链接地址（帮助约课）能力。当用户问"超级猩猩 / 课表"、"xxx 门店明天有什么课"、"xxx 教练这周哪天有课"、"xxx 课程在哪个店能上"、"最近 / 这几天有什么团课"，或者"想约这节课 / 帮我约这节课"时使用。
 metadata:
   requires:
     bins: ['sm-c-cli']
@@ -31,10 +31,10 @@ sm-c-cli class-schedules +search --city "<城市>" --keyword "<关键词>" [--da
 
 参数：
 
-- `--city`（必填）：城市名称，**必须**是超级猩猩业务覆盖城市白名单内的城市，且使用「\*\*市」格式。
-  - 完整白名单见 [`../sm-boxes/references/cities.md`](../sm-boxes/references/cities.md)，调用前请先读取该文件确认城市是否在白名单内。
+- `--city`（必填）：城市名称，**必须**是超级猩猩业务覆盖到的城市，且使用「\*\*市」格式。
+  - 调用前请先读取 [`../sm-boxes/references/cities.md`](../sm-boxes/references/cities.md)，确认城市是否在超级猩猩业务覆盖的范围内。
   - 用户只说「北京 / 上海 / 杭州」等省略「市」的写法时，自动补全为带「市」的形式（北京市 / 上海市 / 杭州市）后再使用。直辖市同样要带「市」，不要写成「北京」「上海」。
-  - 用户问的城市不在白名单内，**直接告知"该城市暂无门店"**，不要发起请求。
+  - 用户问的城市不在超猩业务覆盖的范围内，**直接告知"该城市暂无门店"**，不要发起请求。
   - 如果用户没说城市，**先让用户发送当前位置或询问用户城市**，不要猜。
 - `--keyword`（必填）：门店名 / 课程名 / 教练名关键词。
   - 支持单个关键词，也支持**多个关键词用空格分隔**，多个关键词之间是「同时满足」的关系。
@@ -76,7 +76,7 @@ stdout 是 `{ code, data, msg }` 信封；成功时 `data.list` 是课表数组�
 | `trainerName`           | 教练            |
 | `price`                 | 价格            |
 
-## Shortcut：+order（获取课表预约小程序码）
+## Shortcut：+order（获取课表预约链接地址）
 
 ```
 sm-c-cli class-schedules +order --schedule-id "<scheduleId>" --schedule-id-sk "<scheduleIdSk>"
