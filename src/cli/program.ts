@@ -1,8 +1,6 @@
 import { Command } from 'commander';
 import { registerResources } from './register.js';
-import { PKG_VERSION } from '../config.js';
-
-const CLI_NAME = 'sm-c-cli';
+import { CLI_NAME, PKG_VERSION } from '../config.js';
 
 export function createProgram(): Command {
   const program = new Command();

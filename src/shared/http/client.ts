@@ -1,5 +1,6 @@
 import axios, { type AxiosInstance } from 'axios';
-import { API_BASE_URL, DEFAULT_TIMEOUT_MS, PKG_NAME, PKG_VERSION } from '../../config.js';
+import { API_BASE_URL, DEFAULT_TIMEOUT_MS, CLI_NAME, PKG_VERSION } from '../../config.js';
+import { getClientId } from '../client-id.js';
 
 let cached: AxiosInstance | undefined;
 
@@ -9,7 +10,8 @@ export function getHttpClient(): AxiosInstance {
     baseURL: API_BASE_URL,
     timeout: DEFAULT_TIMEOUT_MS,
     headers: {
-      'User-Agent': `${PKG_NAME}/${PKG_VERSION}`,
+      'User-Agent': `${CLI_NAME}/${PKG_VERSION}`,
+      'client-id': getClientId(),
       Accept: 'application/json',
     },
   });
