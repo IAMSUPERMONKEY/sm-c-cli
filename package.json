@@ -1,5 +1,5 @@
 {
-  "name": "@supermonkey/cli",
+  "name": "sm-cli",
   "version": "0.1.15",
   "description": "SUPERMONKEY 官方 CLI",
   "type": "module",

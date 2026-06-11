@@ -8,7 +8,7 @@ const pkg = JSON.parse(readFileSync(resolve(here, '../package.json'), 'utf8')) a
   version: string;
 };
 
-export const CLI_NAME = 'sm-c-cli';
+export const CLI_NAME = 'sm-cli';
 
 export const PKG_VERSION = pkg.version;
 

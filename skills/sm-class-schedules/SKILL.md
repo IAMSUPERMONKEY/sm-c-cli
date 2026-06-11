@@ -9,7 +9,7 @@ metadata:
 
 # SUPERMONKEY 团课课表
 
-通过 `sm-c-cli class-schedules` 查询 SUPERMONKEY 团课课表，并获取指定课表的预约小程序码。当前提供两个 Shortcut：
+通过 `sm-c-cli class-schedules` 查询 SUPERMONKEY 团课课表，并获取指定课表的预约链接地址。当前提供两个 Shortcut：
 
 - `+search`：按 **城市 + 关键词（门店 / 课程 / 教练，可组合）** 搜索未来 9 天内的课表，可选限定日期。
 - `+order`：根据课表 id（`scheduleId` + `scheduleIdSk`）获取该课表的**预约链接地址**。两个字段都来自 `+search` 的返回结果。
