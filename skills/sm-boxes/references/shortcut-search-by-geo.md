@@ -1,7 +1,7 @@
 # Shortcut：+search-by-geo（查询附近门店）
 
 ```
-sm-cli boxes +search-by-geo --longitude <经度> --latitude <纬度>
+sm-c-cli boxes +search-by-geo --longitude <经度> --latitude <纬度>
 ```
 
 > 所有带空格 / 中文的参数值统一加双引号，避免 shell 把空格 / 中文截断。
@@ -13,7 +13,7 @@ sm-cli boxes +search-by-geo --longitude <经度> --latitude <纬度>
 ## 使用示例
 
 ```
-sm-cli boxes +search-by-geo --longitude "121.45" --latitude "31.22"
+sm-c-cli boxes +search-by-geo --longitude "121.45" --latitude "31.22"
 ```
 
 ## 返回字段

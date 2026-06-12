@@ -3,20 +3,20 @@ name: sm-class-courses
 description: SUPERMONKEY（超级猩猩）团课课程知识库：当用户咨询超级猩猩团课「课程本身」的问题时使用——某节课是什么 / 练什么 / 有什么功效、适合哪些人、有没有某类目标（减肥 / 塑形 / 燃脂）的课、上课注意事项、常见问题，以及「A 课和 B 课有什么区别」这类课程对比。先用本 skill 查到课程资料作为上下文，再据此回答。注意：本 skill 只管课程介绍知识，不查具体课表 / 排期 / 约课（那是 sm-class-schedules），也不查门店（sm-boxes）。
 metadata:
   requires:
-    bins: ['sm-cli']
-  cliHelp: 'sm-cli class-courses --help'
+    bins: ['sm-c-cli']
+  cliHelp: 'sm-c-cli class-courses --help'
 ---
 
 # SUPERMONKEY 团课课程知识库
 
-通过 `sm-cli class-courses +search` 按关键词检索超级猩猩团课课程的资料（课程简介、训练功效、适合人群、常见问题、注意事项）。
+通过 `sm-c-cli class-courses +search` 按关键词检索超级猩猩团课课程的资料（课程简介、训练功效、适合人群、常见问题、注意事项）。
 
 **核心用法：先查再答。** 当用户问到课程相关问题时，不要凭记忆回答，先用 `+search` 拿到课程资料作为上下文，再基于返回内容组织答复。本 skill 的产出是「回答用户问题的依据」，不是直接展示给用户的列表。回复用户时，不用表述你从课程知识库搜索到的资料内容，专注回答用户的相关问题。
 
 ## Shortcut：+search（搜索课程）
 
 ```
-sm-cli class-courses +search --keyword "<关键词>"
+sm-c-cli class-courses +search --keyword "<关键词>"
 ```
 
 > 关键词统一加双引号，避免 shell 把空格 / 中文截断。
@@ -46,8 +46,8 @@ sm-cli class-courses +search --keyword "<关键词>"
 例：「bp 和 bc 课有什么不同？」
 
 ```
-sm-cli class-courses +search --keyword "bp"
-sm-cli class-courses +search --keyword "bc"
+sm-c-cli class-courses +search --keyword "bp"
+sm-c-cli class-courses +search --keyword "bc"
 ```
 
 拿到两次结果后，从 `classIntroduce` / `trainingEffect` / `suitablePeople` 等字段对比两节课的训练内容、功效、适合人群差异，再回答用户。
@@ -58,8 +58,8 @@ sm-cli class-courses +search --keyword "bc"
 ### 使用示例
 
 ```
-sm-cli class-courses +search --keyword "战绳"
-sm-cli class-courses +search --keyword "减肥"
+sm-c-cli class-courses +search --keyword "战绳"
+sm-c-cli class-courses +search --keyword "减肥"
 ```
 
 ### 返回字段

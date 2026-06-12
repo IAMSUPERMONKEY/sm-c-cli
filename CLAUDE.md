@@ -1,4 +1,4 @@
-# sm-cli — Claude Code 项目约定
+# sm-c-cli — Claude Code 项目约定
 
 > 这是给 Claude Code 看的项目级约定。所有约定均**强制**，对仓库内任何代码改动都生效。
 

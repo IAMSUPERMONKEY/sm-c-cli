@@ -1,24 +1,24 @@
 {
-  "name": "@supermonkey/cli",
+  "name": "sm-c-cli",
   "version": "1.0.0",
   "description": "SUPERMONKEY 官方 CLI",
   "type": "module",
   "license": "MIT",
   "author": "deepfunc <xiekai0601@gmail.com>",
-  "homepage": "https://github.com/IAMSUPERMONKEY/sm-cli#readme",
+  "homepage": "https://github.com/IAMSUPERMONKEY/sm-c-cli#readme",
   "bugs": {
-    "url": "https://github.com/IAMSUPERMONKEY/sm-cli/issues"
+    "url": "https://github.com/IAMSUPERMONKEY/sm-c-cli/issues"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/IAMSUPERMONKEY/sm-cli.git"
+    "url": "git+https://github.com/IAMSUPERMONKEY/sm-c-cli.git"
   },
   "publishConfig": {
     "registry": "https://registry.npmjs.org/",
     "access": "public"
   },
   "bin": {
-    "sm-cli": "./dist/index.js"
+    "sm-c-cli": "./dist/index.js"
   },
   "files": [
     "dist",

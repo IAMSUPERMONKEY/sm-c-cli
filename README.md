@@ -1,8 +1,8 @@
-# @supermonkey/cli
+# sm-c-cli
 
 <p align="center">
   <a href="https://www.supermonkey.com.cn">
-    <img src="https://raw.githubusercontent.com/IAMSUPERMONKEY/sm-cli/master/assets/logo.png" alt="超级猩猩" width="160" />
+    <img src="https://raw.githubusercontent.com/IAMSUPERMONKEY/sm-c-cli/master/assets/logo.png" alt="超级猩猩" width="160" />
   </a>
 </p>
 超级猩猩是一个始于健身的生活方式品牌，致力于让更多人以更轻松、更快乐、更可持续的方式走进运动。品牌以线下训练空间为核心，通过专业课程、优质教练和有氛围的运动环境，为用户提供安全、高效、有陪伴感的健身体验。
@@ -18,16 +18,16 @@
 在终端中输入以下命令：
 ```shell
 # 安装 CLI
-npm install -g @supermonkey/cli
+npm install -g sm-c-cli@latest
 
 # 安装配套 Skills（必需）
-npx skills add IAMSUPERMONKEY/sm-cli -y -g
+npx skills add IAMSUPERMONKEY/sm-c-cli -y -g
 ```
 
 ### Agent 安装
 将以下文字复制给 AI Agent（如 Claude Code，Codex，OpenClaw），让它完成安装：
 ```shell
-帮我安装超级猩猩 CLI：https://github.com/IAMSUPERMONKEY/sm-cli/installation-guide.md
+帮我安装超级猩猩 CLI：https://github.com/IAMSUPERMONKEY/sm-c-cli/installation-guide.md
 ```
 
 配置完成后，**请重启你的 AI Agent** 以确保 Skills 完整加载。

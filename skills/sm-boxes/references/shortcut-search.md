@@ -1,7 +1,7 @@
 # Shortcut：+search（按关键字搜索门店）
 
 ```
-sm-cli boxes +search --keyword "<关键字>"
+sm-c-cli boxes +search --keyword "<关键字>"
 ```
 
 > 带空格 / 中文的参数值统一加双引号。
@@ -22,9 +22,9 @@ sm-cli boxes +search --keyword "<关键字>"
 ## 使用示例
 
 ```
-sm-cli boxes +search --keyword "深圳 福田区"
-sm-cli boxes +search --keyword "深圳 单车"
-sm-cli boxes +search --keyword "海岸城"
+sm-c-cli boxes +search --keyword "深圳 福田区"
+sm-c-cli boxes +search --keyword "深圳 单车"
+sm-c-cli boxes +search --keyword "海岸城"
 ```
 
 ## 返回字段
