@@ -1,26 +1,33 @@
 {
-  "name": "sm-cli",
+  "name": "@supermonkey/cli",
   "version": "1.0.0",
   "description": "SUPERMONKEY 官方 CLI",
   "type": "module",
+  "license": "MIT",
   "author": "deepfunc <xiekai0601@gmail.com>",
+  "homepage": "https://github.com/IAMSUPERMONKEY/sm-cli#readme",
+  "bugs": {
+    "url": "https://github.com/IAMSUPERMONKEY/sm-cli/issues"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/IAMSUPERMONKEY/sm-cli.git"
   },
   "publishConfig": {
-    "registry": "https://npm.supermonkey.cc/"
+    "registry": "https://registry.npmjs.org/",
+    "access": "public"
   },
   "bin": {
     "sm-cli": "./dist/index.js"
   },
   "files": [
     "dist",
-    "skills"
+    "skills",
+    "assets"
   ],
   "scripts": {
     "dev": "tsx src/index.ts",
-    "build": "tsup src/index.ts --format esm --dts --sourcemap --clean",
+    "build": "tsup src/index.ts --format esm --dts --clean",
     "test": "vitest run",
     "test:watch": "vitest",
     "lint": "eslint .",
