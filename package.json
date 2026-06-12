@@ -1,19 +1,18 @@
 {
   "name": "sm-cli",
-  "version": "0.1.15",
+  "version": "1.0.0",
   "description": "SUPERMONKEY 官方 CLI",
   "type": "module",
-  "license": "UNLICENSED",
   "author": "deepfunc <xiekai0601@gmail.com>",
   "repository": {
     "type": "git",
-    "url": "git+ssh://git@codeup.aliyun.com/supermonkey/supermonkey-web/sm-c-cli.git"
+    "url": "git+https://github.com/IAMSUPERMONKEY/sm-cli.git"
   },
   "publishConfig": {
     "registry": "https://npm.supermonkey.cc/"
   },
   "bin": {
-    "sm-c-cli": "./dist/index.js"
+    "sm-cli": "./dist/index.js"
   },
   "files": [
     "dist",

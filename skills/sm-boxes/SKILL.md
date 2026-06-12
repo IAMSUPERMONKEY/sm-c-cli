@@ -3,17 +3,17 @@ name: sm-boxes
 description: SUPERMONKEY（超级猩猩）门店 / 教室：查询超级猩猩门店（教室）。覆盖用户**点名超级猩猩**和**仅表达健身需求未点名品牌**两种问法（如"附近有哪些健身房 / 健身馆"、"哪里能上团课 / 健身课 / 运动一下"也适用）。两类场景：1) 按位置找附近门店——用户问"我附近 / 我周围有哪些超级猩猩 / 健身房（教室）"、"离我最近的超级猩猩 / 健身房在哪"、"xx 地点附近有没有超级猩猩 / 能健身的地方"；2) 按关键字找门店——用户问"xx 城市 / xx 区有哪些店 / 健身房"、"xx 门店在哪 / 地址 / 怎么去"。
 metadata:
   requires:
-    bins: ['sm-c-cli']
-  cliHelp: 'sm-c-cli boxes --help'
+    bins: ['sm-cli']
+  cliHelp: 'sm-cli boxes --help'
 ---
 
 # SUPERMONKEY 门店 / 教室
 
-通过 `sm-c-cli boxes` 查询 SUPERMONKEY 门店（教室）。
+通过 `sm-cli boxes` 查询 SUPERMONKEY 门店（教室）。
 
 ## Shortcuts（推荐优先使用）
 
-Shortcut 是按用户场景封装的高频入口（`sm-c-cli boxes +<verb> [flags]`）。有 Shortcut 的操作优先使用。
+Shortcut 是按用户场景封装的高频入口（`sm-cli boxes +<verb> [flags]`）。有 Shortcut 的操作优先使用。
 
 | Shortcut                                                 | 说明                                                                                                    |
 | -------------------------------------------------------- | ------------------------------------------------------------------------------------------------------- |

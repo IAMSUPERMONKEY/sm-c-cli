@@ -1,7 +1,7 @@
 # 原子命令：locations geocode（地理编码）
 
 ```
-sm-c-cli boxes locations geocode --keyword "<地理位置描述>"
+sm-cli boxes locations geocode --keyword "<地理位置描述>"
 ```
 
 参数：
@@ -12,8 +12,8 @@ sm-c-cli boxes locations geocode --keyword "<地理位置描述>"
 ## 使用示例
 
 ```
-sm-c-cli boxes locations geocode --keyword "海岸城"
-sm-c-cli boxes locations geocode --keyword "上海市静安区静安寺"
+sm-cli boxes locations geocode --keyword "海岸城"
+sm-cli boxes locations geocode --keyword "上海市静安区静安寺"
 ```
 
 ## 返回字段

@@ -12,8 +12,8 @@
 
 ```shell
 # 安装 CLI
-npm install -g @supermonkey/cli
+npm install -g sm-cli
 
 # 安装 CLI Skills（必需）
-npx skills add IAMSUPERMONKEY/sm-c-cli -y -g
+npx skills add sm-cli -y -g
 ``` 

@@ -7,7 +7,7 @@ export function registerSkills(program: Command): void {
 
   cmd
     .command('+get-path')
-    .description('获取已发布 sm-c-cli 包内 skills 目录的完整路径')
+    .description('获取已发布 sm-cli 包内 skills 目录的完整路径')
     .action(() => {
       const entry = fs.realpathSync(process.argv[1]!);
       const pkgRoot = path.resolve(path.dirname(entry), '..');

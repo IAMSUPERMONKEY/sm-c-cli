@@ -3,13 +3,13 @@ name: sm-class-schedules
 description: SUPERMONKEY（超级猩猩）团课课表：提供超级猩猩团课课表的查询/搜索、与获取课表预约链接地址（帮助约课）能力。当用户问"超级猩猩 / 课表"、"xxx 门店明天有什么课"、"xxx 教练这周哪天有课"、"xxx 课程在哪个店能上"、"最近 / 这几天有什么团课"，或者"想约这节课 / 帮我约这节课"时使用。
 metadata:
   requires:
-    bins: ['sm-c-cli']
-  cliHelp: 'sm-c-cli class-schedules --help'
+    bins: ['sm-cli']
+  cliHelp: 'sm-cli class-schedules --help'
 ---
 
 # SUPERMONKEY 团课课表
 
-通过 `sm-c-cli class-schedules` 查询 SUPERMONKEY 团课课表，并获取指定课表的预约链接地址。当前提供两个 Shortcut：
+通过 `sm-cli class-schedules` 查询 SUPERMONKEY 团课课表，并获取指定课表的预约链接地址。当前提供两个 Shortcut：
 
 - `+search`：按 **城市 + 关键词（门店 / 课程 / 教练，可组合）** 搜索未来 9 天内的课表，可选限定日期。
 - `+order`：根据课表 id（`scheduleId` + `scheduleIdSk`）获取该课表的**预约链接地址**。两个字段都来自 `+search` 的返回结果。
@@ -24,7 +24,7 @@ metadata:
 - 如果用户明确要看「某一天」或「某几天」的课，使用 `--date` 参数**分多次查询**（每次只能传一个日期），再把多次结果**合并后**给用户。
 
 ```
-sm-c-cli class-schedules +search --city "<城市>" --keyword "<关键词>" [--date "YYYY-MM-DD"]
+sm-cli class-schedules +search --city "<城市>" --keyword "<关键词>" [--date "YYYY-MM-DD"]
 ```
 
 > 所有参数值统一加双引号，避免 shell 把空格 / 中文截断。
@@ -48,19 +48,19 @@ sm-c-cli class-schedules +search --city "<城市>" --keyword "<关键词>" [--da
 按城市 + 单维度关键词查询：
 
 ```
-sm-c-cli class-schedules +search --city "上海市" --keyword "<课程名>"
+sm-cli class-schedules +search --city "上海市" --keyword "<课程名>"
 ```
 
 按门店 + 教练组合查询：
 
 ```
-sm-c-cli class-schedules +search --city "上海市" --keyword "<门店名> <教练名>"
+sm-cli class-schedules +search --city "上海市" --keyword "<门店名> <教练名>"
 ```
 
 按门店 + 课程组合查询，并限定日期：
 
 ```
-sm-c-cli class-schedules +search --city "上海市" --keyword "<门店名> <课程名>" --date "2026-05-08"
+sm-cli class-schedules +search --city "上海市" --keyword "<门店名> <课程名>" --date "2026-05-08"
 ```
 
 ### 返回字段
@@ -79,7 +79,7 @@ stdout 是 `{ code, data, msg }` 信封；成功时 `data.list` 是课表数组�
 ## Shortcut：+order（获取课表预约链接地址）
 
 ```
-sm-c-cli class-schedules +order --schedule-id "<scheduleId>" --schedule-id-sk "<scheduleIdSk>"
+sm-cli class-schedules +order --schedule-id "<scheduleId>" --schedule-id-sk "<scheduleIdSk>"
 ```
 
 参数：
@@ -92,7 +92,7 @@ sm-c-cli class-schedules +order --schedule-id "<scheduleId>" --schedule-id-sk "<
 ### 使用示例
 
 ```
-sm-c-cli class-schedules +order --schedule-id "1234567" --schedule-id-sk "abcdef..."
+sm-cli class-schedules +order --schedule-id "1234567" --schedule-id-sk "abcdef..."
 ```
 
 ### 返回字段
