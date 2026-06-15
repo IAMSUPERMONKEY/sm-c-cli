@@ -27,7 +27,7 @@ npx skills add IAMSUPERMONKEY/sm-c-cli -y -g
 ### Agent 安装
 将以下文字复制给 AI Agent（如 Claude Code，Codex，OpenClaw），让它完成安装：
 ```shell
-帮我安装超级猩猩 CLI：https://github.com/IAMSUPERMONKEY/sm-c-cli/installation-guide.md
+帮我安装超级猩猩 CLI：https://github.com/IAMSUPERMONKEY/sm-c-cli/blob/master/installation-guide.md
 ```
 
 配置完成后，**请重启你的 AI Agent** 以确保 Skills 完整加载。
