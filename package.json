@@ -1,6 +1,6 @@
 {
   "name": "sm-c-cli",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "SUPERMONKEY 官方 CLI",
   "type": "module",
   "license": "MIT",
@@ -23,7 +23,8 @@
   "files": [
     "dist",
     "skills",
-    "assets"
+    "assets",
+    "README.md"
   ],
   "scripts": {
     "dev": "tsx src/index.ts",
