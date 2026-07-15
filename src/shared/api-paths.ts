@@ -2,6 +2,7 @@ export const API_PATHS = {
   classSchedulesSearch: '/class-schedules/search',
   classSchedulesOrder: '/class-schedules/getOrderCode',
   classCoursesSearch: '/class-courses/search',
+  trainingRecordsList: '/training-records/queryList',
   boxesSearchByGeo: '/boxes/searchByGeo',
   boxesSearch: '/boxes/search',
   boxesGeo: '/boxes/geo',

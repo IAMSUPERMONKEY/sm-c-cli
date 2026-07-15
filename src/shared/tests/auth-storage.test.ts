@@ -53,7 +53,7 @@ describe('授权凭证存储', () => {
       expect.objectContaining({ code: 40101, message: AUTH_LOGIN_GUIDANCE }),
     );
     expect(AUTH_LOGIN_GUIDANCE).toBe(
-      '请先在超级猩猩 App 中开启 CLI 访问授权：进入“我的”→ 点击右上角“设置”→ 选择“超级猩猩 API Key”；获取令牌后，运行 sm-c-cli auth login --token <令牌> 完成配置。',
+      '请在超级猩猩 App 中开启 CLI 访问授权：进入“我的”→ 点击右上角“设置”→ 选择“超级猩猩 API Key”；获取令牌后，运行 sm-c-cli auth login --token <令牌> 完成配置。',
     );
   });
 
