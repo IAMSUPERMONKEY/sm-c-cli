@@ -1,16 +1,13 @@
-import {
-  chmodSync,
-  existsSync,
-  mkdirSync,
-  readFileSync,
-  unlinkSync,
-  writeFileSync,
-} from 'node:fs';
+import { chmodSync, existsSync, mkdirSync, readFileSync, unlinkSync, writeFileSync } from 'node:fs';
 import { homedir } from 'node:os';
 import { join } from 'node:path';
 import { CLI_NAME } from '../config.js';
+import { CliError } from './errors.js';
 
 const CREDENTIALS_FILE = 'credentials.json';
+
+export const AUTH_LOGIN_GUIDANCE =
+  '请在超级猩猩 App 中开启 CLI 访问授权：进入“我的”→ 点击右上角“设置”→ 选择“超级猩猩 API Key”；获取令牌后，运行 sm-c-cli auth login --token <令牌> 完成配置。';
 
 export function getConfigDir(): string {
   return join(homedir(), '.config', CLI_NAME);
@@ -51,6 +48,12 @@ export function getAuthToken(configDir = getConfigDir()): string | undefined {
   } catch {
     return undefined;
   }
+}
+
+export function requireAuthToken(configDir = getConfigDir()): string {
+  const token = getAuthToken(configDir);
+  if (!token) throw new CliError(40101, AUTH_LOGIN_GUIDANCE);
+  return token;
 }
 
 export function clearAuthToken(configDir = getConfigDir()): void {
