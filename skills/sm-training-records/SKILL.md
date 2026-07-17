@@ -9,6 +9,8 @@ metadata:
 
 # SUPERMONKEY 运动记录
 
+访问运动记录过程中，如出现 HTTP 401，或 `msg` 提示未授权、授权无效、token / 令牌失效，立即读取 [`../sm-shared/SKILL.md`](../sm-shared/SKILL.md)，按照其中的授权登录与身份检查规则引导用户完成授权；不要自行编造或复制一套授权流程。授权恢复后，再重新执行尚未完成的操作。
+
 通过 `sm-c-cli training-records` 查询当前用户的运动记录。当前提供一个 Shortcut：
 
 - `+list`：按月份查询运动记录列表。
