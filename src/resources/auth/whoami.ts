@@ -1,5 +1,6 @@
 import type { Command } from 'commander';
-import { getConfigDir, requireAuthToken } from '@/shared/auth-storage.js';
+import { AxiosError } from 'axios';
+import { AUTH_LOGIN_GUIDANCE, getConfigDir, requireAuthToken } from '@/shared/auth-storage.js';
 import { ok, fail } from '@/shared/envelope.js';
 import { CliError } from '@/shared/errors.js';
 import { exitCodeOf } from '@/shared/exit-codes.js';
@@ -22,7 +23,16 @@ export async function loadWhoAmI(
   request: WhoAmIRequest = getWhoAmI,
 ): Promise<WhoAmIResult> {
   requireAuthToken(configDir);
-  return request();
+  try {
+    return await request();
+  } catch (err) {
+    const cliErr = toCliError(err);
+    const isHttpUnauthorized = err instanceof AxiosError && err.response?.status === 401;
+    if (cliErr.code === 401 || isHttpUnauthorized) {
+      throw new CliError(401, `授权令牌无效。${AUTH_LOGIN_GUIDANCE}`);
+    }
+    throw cliErr;
+  }
 }
 
 export function registerWhoAmI(parent: Command): void {

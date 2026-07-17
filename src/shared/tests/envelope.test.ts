@@ -30,6 +30,9 @@ describe('exitCodeOf', () => {
   it('401xx 映射到 AUTH', () => {
     expect(exitCodeOf(40101)).toBe(EXIT.AUTH);
   });
+  it('HTTP 401 映射到 AUTH', () => {
+    expect(exitCodeOf(401)).toBe(EXIT.AUTH);
+  });
   it('3xxxx 映射到 UPSTREAM', () => {
     expect(exitCodeOf(30000)).toBe(EXIT.UPSTREAM);
   });
