@@ -4,23 +4,13 @@ import type { TrainingRecord } from '../schema.js';
 
 function record(overrides: Partial<TrainingRecord> = {}): TrainingRecord {
   return {
-    boxId: 1568,
-    boxIdSk: 'box-sk',
     boxName: '留仙洞T33全时中心综合训练店',
-    classId: 32436,
     className: '精准塑形-臀腿',
-    scheduleId: 1445941891,
-    scheduleIdSk: 'schedule-sk',
-    scheduleDate: '2026-07-15',
+    trainingId: 1445941891,
     startTime: '2026-07-15 20:30:00',
     endTime: '2026-07-15 21:30:00',
-    face: 'https://example.com/face.jpg',
-    trainerName: '明天',
-    trainerUserId: 30874061,
-    trainerUserIdSk: 'trainer-sk',
-    nonStart: 0,
+    trainerStageName: '明天',
     checkin: 1,
-    isWait: 0,
     trainingType: 1,
     ...overrides,
   };
@@ -30,7 +20,7 @@ describe('运动记录表格', () => {
   it('把运动记录渲染为人类可读表格', () => {
     const output = renderTrainingRecordsTable([record()]);
 
-    expect(output).toContain('课表日期');
+    expect(output).toContain('日期');
     expect(output).toContain('时间');
     expect(output).toContain('门店名称');
     expect(output).toContain('课程名称');
@@ -43,16 +33,19 @@ describe('运动记录表格', () => {
     expect(output).toContain('共 1 条运动记录');
   });
 
-  it('渲染训练营、私教和未开课状态', () => {
+  it('渲染全部运动类型和签到状态', () => {
     const output = renderTrainingRecordsTable([
-      record({ scheduleId: 1, trainingType: 2, checkin: 0, isWait: 1 }),
-      record({ scheduleId: 2, trainingType: 3, nonStart: 1 }),
+      record({ trainingId: 1, trainingType: 2, checkin: 0 }),
+      record({ trainingId: 2, trainingType: 3 }),
+      record({ trainingId: 3, trainingType: 4 }),
+      record({ trainingId: 4, trainingType: 5 }),
     ]);
 
     expect(output).toContain('训练营');
     expect(output).toContain('私教');
-    expect(output).toContain('等候中');
-    expect(output).toContain('未开课');
+    expect(output).toContain('甄选商品');
+    expect(output).toContain('SGO');
+    expect(output).toContain('未签到');
   });
 
   it('空列表渲染为空结果提示', () => {

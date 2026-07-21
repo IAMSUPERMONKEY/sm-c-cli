@@ -11,25 +11,15 @@ export const ListInput = z.object({
 export type ListInput = z.infer<typeof ListInput>;
 
 export const TrainingRecord = z.object({
-  classId: z.number().int().describe('课程 id'),
+  trainingId: z.number().describe('训练记录 id'),
+  boxName: z.string().describe('门店名称'),
   className: z.string().describe('课程名称'),
-  boxId: z.number().int().describe('门店 id'),
-  boxIdSk: z.string().describe('门店 id 验证码'),
-  scheduleDate: z.string().describe('课表日期'),
   startTime: z.string().describe('课表开始时间'),
   endTime: z.string().describe('课表结束时间'),
-  face: z.string().describe('教练头像地址'),
-  scheduleId: z.number().describe('课表 id'),
-  scheduleIdSk: z.string().describe('课表 id 验证'),
-  trainerName: z.string().describe('教练昵称'),
-  trainerUserId: z.number().int().describe('教练 id'),
-  trainerUserIdSk: z.string().describe('教练 id 验证码'),
-  boxName: z.string().describe('门店名称'),
-  nonStart: z.union([z.literal(0), z.literal(1)]).describe('未开课状态'),
+  trainerStageName: z.string().describe('教练昵称'),
   checkin: z.union([z.literal(0), z.literal(1)]).describe('签到状态'),
-  isWait: z.number().int().describe('是否等候中'),
   trainingType: z
-    .union([z.literal(1), z.literal(2), z.literal(3)])
+    .union([z.literal(1), z.literal(2), z.literal(3), z.literal(4), z.literal(5)])
     .describe('运动类型'),
 });
 export type TrainingRecord = z.infer<typeof TrainingRecord>;
