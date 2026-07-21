@@ -80,15 +80,15 @@ sm-c-cli training-records +list --year-month "2026-07"
 
 stdout 是 `{ code, data, msg }` 信封；成功时 `data.list` 是运动记录数组。主要字段：
 
-| 字段                    | 含义                                                              |
-| ----------------------- | ----------------------------------------------------------------- |
-| `trainingId`            | 训练记录 id                                                       |
-| `startTime` / `endTime` | 开始 / 结束时间，运动日期从 `startTime` 提取                      |
-| `boxName`               | 门店名称                                                          |
-| `className`             | 课程名称                                                          |
-| `trainerStageName`      | 教练昵称                                                          |
-| `trainingType`          | 运动类型：`1` 团体课、`2` 训练营、`3` 私教、`4` 甄选商品、`5` SGO |
-| `checkin`               | 签到状态：`0` 未签到、`1` 已签到                                  |
+| 字段                    | 含义                                                      |
+| ----------------------- | --------------------------------------------------------- |
+| `trainingId`            | 训练记录 id                                               |
+| `startTime` / `endTime` | 开始 / 结束时间，运动日期从 `startTime` 提取              |
+| `boxName`               | 门店名称                                                  |
+| `className`             | 课程名称                                                  |
+| `trainerStageName`      | 教练昵称                                                  |
+| `trainingType`          | 运动类型：`团体课`、`训练营`、`私教`、`甄选商品` 或 `SGO` |
+| `checkin`               | 签到状态：`未签到` 或 `已签到`                            |
 
 向用户展示结果时，优先使用日期、时间、门店、课程、教练、运动类型和签到状态等人类可读信息；除非用户明确要求，不展示 `trainingId` 等内部字段。
 

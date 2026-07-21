@@ -1,13 +1,13 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { listTrainingRecords } from '../api.js';
 import { getHttpClient } from '@/shared/http/client.js';
-import type { TrainingRecord } from '../schema.js';
+import type { ApiTrainingRecord } from '../schema.js';
 
 vi.mock('../../../shared/http/client.js', () => ({
   getHttpClient: vi.fn(),
 }));
 
-function record(overrides: Partial<TrainingRecord> = {}): TrainingRecord {
+function record(overrides: Partial<ApiTrainingRecord> = {}): ApiTrainingRecord {
   return {
     boxName: '留仙洞T33全时中心综合训练店',
     className: '精准塑形-臀腿',

@@ -10,8 +10,8 @@ function record(overrides: Partial<TrainingRecord> = {}): TrainingRecord {
     startTime: '2026-07-15 20:30:00',
     endTime: '2026-07-15 21:30:00',
     trainerStageName: '明天',
-    checkin: 1,
-    trainingType: 1,
+    checkin: '已签到',
+    trainingType: '团体课',
     ...overrides,
   };
 }
@@ -35,10 +35,10 @@ describe('运动记录表格', () => {
 
   it('渲染全部运动类型和签到状态', () => {
     const output = renderTrainingRecordsTable([
-      record({ trainingId: 1, trainingType: 2, checkin: 0 }),
-      record({ trainingId: 2, trainingType: 3 }),
-      record({ trainingId: 3, trainingType: 4 }),
-      record({ trainingId: 4, trainingType: 5 }),
+      record({ trainingId: 1, trainingType: '训练营', checkin: '未签到' }),
+      record({ trainingId: 2, trainingType: '私教' }),
+      record({ trainingId: 3, trainingType: '甄选商品' }),
+      record({ trainingId: 4, trainingType: 'SGO' }),
     ]);
 
     expect(output).toContain('训练营');

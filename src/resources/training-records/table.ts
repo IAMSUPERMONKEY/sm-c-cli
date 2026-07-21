@@ -3,14 +3,6 @@ import pc from 'picocolors';
 import { labelOf } from '@/shared/schema-meta.js';
 import { TrainingRecord, type TrainingRecord as TrainingRecordType } from './schema.js';
 
-const TRAINING_TYPE_LABELS: Record<TrainingRecordType['trainingType'], string> = {
-  1: '团体课',
-  2: '训练营',
-  3: '私教',
-  4: '甄选商品',
-  5: 'SGO',
-};
-
 export function renderTrainingRecordsTable(list: TrainingRecordType[]): string {
   if (list.length === 0) {
     return '暂无运动记录';
@@ -37,8 +29,8 @@ export function renderTrainingRecordsTable(list: TrainingRecordType[]): string {
       record.boxName,
       record.className,
       record.trainerStageName,
-      TRAINING_TYPE_LABELS[record.trainingType],
-      formatStatus(record),
+      record.trainingType,
+      record.checkin,
     ]);
   }
 
@@ -55,8 +47,4 @@ function formatTimeRange(startTime: string, endTime: string): string {
 
 function hhmm(datetime: string): string {
   return (datetime.split(' ').at(-1) ?? '').slice(0, 5);
-}
-
-function formatStatus(record: TrainingRecordType): string {
-  return record.checkin === 1 ? '已签到' : '未签到';
 }

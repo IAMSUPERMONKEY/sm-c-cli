@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { ListEnvelope, ListInput } from '../schema.js';
+import { ListEnvelope, ListInput, ListResult } from '../schema.js';
 
 describe('运动记录列表参数', () => {
   it('接受 YYYY-MM 格式的年月', () => {
@@ -18,7 +18,7 @@ describe('运动记录列表参数', () => {
 });
 
 describe('运动记录列表响应', () => {
-  it('接受最新接口定义中的训练记录字段', () => {
+  it('接受后端返回的数字运动类型', () => {
     const result = ListEnvelope.parse({
       code: 0,
       data: {
@@ -42,6 +42,28 @@ describe('运动记录列表响应', () => {
       trainingId: 1445941891,
       trainerStageName: '明天',
       trainingType: 5,
+    });
+  });
+
+  it('CLI 输出接受字符串运动类型和签到状态', () => {
+    const result = ListResult.parse({
+      list: [
+        {
+          trainingId: 1445941891,
+          boxName: '留仙洞T33全时中心综合训练店',
+          className: '精准塑形-臀腿',
+          startTime: '2026-07-15 20:30:00',
+          endTime: '2026-07-15 21:30:00',
+          trainerStageName: '明天',
+          checkin: '已签到',
+          trainingType: 'SGO',
+        },
+      ],
+    });
+
+    expect(result.list[0]).toMatchObject({
+      trainingType: 'SGO',
+      checkin: '已签到',
     });
   });
 });

@@ -1,15 +1,9 @@
 import { API_PATHS } from '@/shared/api-paths.js';
 import { CliError } from '@/shared/errors.js';
 import { getHttpClient } from '@/shared/http/client.js';
-import {
-  ListEnvelope,
-  type ListInput,
-  type ListResult,
-} from './schema.js';
+import { ListEnvelope, type ListInput, type ApiListResult } from './schema.js';
 
-export async function listTrainingRecords(
-  input: ListInput,
-): Promise<ListResult> {
+export async function listTrainingRecords(input: ListInput): Promise<ApiListResult> {
   const client = getHttpClient();
   const res = await client.post(API_PATHS.trainingRecordsList, {
     date: input.yearMonth,
