@@ -34,8 +34,8 @@
     "lint": "eslint .",
     "format": "prettier --write .",
     "prepare": "husky",
-    "check": "pnpm lint && pnpm test && pnpm build",
-    "prepublishOnly": "pnpm lint && pnpm test && pnpm build"
+    "check": "npm run lint && npm run test && npm run build",
+    "prepublishOnly": "npm run check"
   },
   "engines": {
     "node": ">=20"
