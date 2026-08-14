@@ -6,6 +6,9 @@ import { getHttpClient } from '../client.js';
 vi.mock('../../auth-storage.js', () => ({
   getAuthToken: vi.fn(),
 }));
+vi.mock('../../client-id.js', () => ({
+  getClientId: () => 'test-client-id',
+}));
 
 const client = getHttpClient();
 
@@ -39,9 +42,7 @@ describe('HTTP 客户端授权头', () => {
   });
 
   it('每次请求都读取当前 token', async () => {
-    vi.mocked(getAuthToken)
-      .mockReturnValueOnce('first-token')
-      .mockReturnValueOnce('second-token');
+    vi.mocked(getAuthToken).mockReturnValueOnce('first-token').mockReturnValueOnce('second-token');
 
     const first = await client.get('/first');
     const second = await client.get('/second');

@@ -33,15 +33,15 @@ describe('auth login 凭证存储', () => {
   it('logout 仅删除本地凭证并保留配置目录中的其他文件', () => {
     const configDir = mkdtempSync(join(tmpdir(), 'sm-c-cli-auth-'));
     const { credentialPath } = login({ token: 'secret-token' }, configDir);
-    const clientIdPath = join(configDir, 'client-id');
-    writeFileSync(clientIdPath, 'client-id', 'utf8');
+    const clientIdSecretPath = join(configDir, 'client-id-secret');
+    writeFileSync(clientIdSecretPath, 'client-id-secret', 'utf8');
 
     const result = logout(configDir);
 
     expect(result).toBeUndefined();
     expect(existsSync(credentialPath)).toBe(false);
     expect(existsSync(configDir)).toBe(true);
-    expect(readFileSync(clientIdPath, 'utf8')).toBe('client-id');
+    expect(readFileSync(clientIdSecretPath, 'utf8')).toBe('client-id-secret');
   });
 
   it('本地凭证不存在时 logout 仍成功', () => {
