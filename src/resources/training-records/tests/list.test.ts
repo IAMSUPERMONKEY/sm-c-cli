@@ -9,6 +9,8 @@ function record(
 ): ApiTrainingRecord {
   return {
     trainingId,
+    orderType: 1,
+    orderId: `order-${trainingId}`,
     boxName: '留仙洞T33全时中心综合训练店',
     className: '精准塑形-臀腿',
     startTime: '2026-07-15 20:30:00',
@@ -39,5 +41,6 @@ describe('运动记录展示字段映射', () => {
       '已签到',
       '已签到',
     ]);
+    expect(result.list[0]).toMatchObject({ orderType: 1, orderId: 'order-1' });
   });
 });

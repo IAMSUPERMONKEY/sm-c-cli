@@ -12,6 +12,8 @@ export type ListInput = z.infer<typeof ListInput>;
 
 const TrainingRecordBase = z.object({
   trainingId: z.number().describe('训练记录 id'),
+  orderType: z.number().int().describe('订单类型'),
+  orderId: z.string().optional().describe('订单 id'),
   boxName: z.string().describe('门店名称'),
   className: z.string().describe('课程名称'),
   startTime: z.string().describe('课表开始时间'),

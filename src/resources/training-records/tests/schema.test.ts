@@ -25,6 +25,8 @@ describe('运动记录列表响应', () => {
         list: [
           {
             trainingId: 1445941891,
+            orderType: 1,
+            orderId: 'order-1445941891',
             boxName: '留仙洞T33全时中心综合训练店',
             className: '精准塑形-臀腿',
             startTime: '2026-07-15 20:30:00',
@@ -40,9 +42,43 @@ describe('运动记录列表响应', () => {
 
     expect(result.data.list[0]).toMatchObject({
       trainingId: 1445941891,
+      orderType: 1,
+      orderId: 'order-1445941891',
       trainerStageName: '明天',
       trainingType: 5,
     });
+  });
+
+  it('要求返回订单类型，订单 id 可缺省', () => {
+    const record = {
+      trainingId: 1445941891,
+      boxName: '留仙洞T33全时中心综合训练店',
+      className: '精准塑形-臀腿',
+      startTime: '2026-07-15 20:30:00',
+      endTime: '2026-07-15 21:30:00',
+      trainerStageName: '明天',
+      checkin: 1,
+      trainingType: 5,
+    };
+
+    expect(() =>
+      ListEnvelope.parse({ code: 0, data: { list: [record] }, msg: 'success' }),
+    ).toThrow();
+    const parsedRecord = ListEnvelope.parse({
+      code: 0,
+      data: { list: [{ ...record, orderType: 1 }] },
+      msg: 'success',
+    }).data.list[0];
+
+    expect(parsedRecord).toMatchObject({ orderType: 1 });
+    expect(parsedRecord).not.toHaveProperty('orderId');
+    expect(() =>
+      ListEnvelope.parse({
+        code: 0,
+        data: { list: [{ ...record, orderType: 1.5 }] },
+        msg: 'success',
+      }),
+    ).toThrow();
   });
 
   it('CLI 输出接受字符串运动类型和签到状态', () => {
@@ -50,6 +86,8 @@ describe('运动记录列表响应', () => {
       list: [
         {
           trainingId: 1445941891,
+          orderType: 1,
+          orderId: 'order-1445941891',
           boxName: '留仙洞T33全时中心综合训练店',
           className: '精准塑形-臀腿',
           startTime: '2026-07-15 20:30:00',

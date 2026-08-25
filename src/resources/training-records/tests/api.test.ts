@@ -12,6 +12,8 @@ function record(overrides: Partial<ApiTrainingRecord> = {}): ApiTrainingRecord {
     boxName: '留仙洞T33全时中心综合训练店',
     className: '精准塑形-臀腿',
     trainingId: 1445941891,
+    orderType: 1,
+    orderId: 'order-1445941891',
     startTime: '2026-07-15 20:30:00',
     endTime: '2026-07-15 21:30:00',
     trainerStageName: '明天',

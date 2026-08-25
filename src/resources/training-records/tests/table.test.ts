@@ -7,6 +7,8 @@ function record(overrides: Partial<TrainingRecord> = {}): TrainingRecord {
     boxName: '留仙洞T33全时中心综合训练店',
     className: '精准塑形-臀腿',
     trainingId: 1445941891,
+    orderType: 1,
+    orderId: 'order-1445941891',
     startTime: '2026-07-15 20:30:00',
     endTime: '2026-07-15 21:30:00',
     trainerStageName: '明天',
@@ -31,6 +33,9 @@ describe('运动记录表格', () => {
     expect(output).toContain('团体课');
     expect(output).toContain('已签到');
     expect(output).toContain('共 1 条运动记录');
+    expect(output).not.toContain('订单类型');
+    expect(output).not.toContain('订单 id');
+    expect(output).not.toContain('order-1445941891');
   });
 
   it('渲染全部运动类型和签到状态', () => {
