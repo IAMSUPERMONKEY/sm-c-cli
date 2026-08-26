@@ -1,11 +1,10 @@
-import { isAbsolute } from 'node:path';
-
 import { CliError } from '@/shared/errors.js';
 import type { CommandRunner } from './command-runner.js';
 
 export const DEFAULT_NPM_REGISTRY = 'https://registry.npmjs.org/';
 
 const PACKAGE_NAME = 'sm-c-cli';
+const SKILLS_SOURCE = 'IAMSUPERMONKEY/sm-c-cli';
 const SEMVER_PATTERN =
   /^(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)(?:-([0-9A-Za-z-]+(?:\.[0-9A-Za-z-]+)*))?(?:\+[0-9A-Za-z-]+(?:\.[0-9A-Za-z-]+)*)?$/;
 
@@ -122,13 +121,7 @@ export class UpdateService {
     this.reportProgress('');
 
     this.reportProgress('正在更新 Skills...');
-    const skillsPathResult = await this.runner.run(PACKAGE_NAME, ['skills', '+get-path']);
-    const skillsPath = skillsPathResult.stdout.trim();
-    if (!skillsPath || !isAbsolute(skillsPath)) {
-      throw new CliError(30000, '更新后的 CLI 返回了无效的 Skills 路径');
-    }
-
-    await this.runner.run('npx', ['--yes', 'skills', 'add', skillsPath, '-y', '-g']);
+    await this.runner.run('npx', ['--yes', 'skills', 'add', SKILLS_SOURCE, '-y', '-g']);
     this.reportProgress('Skills 已更新');
     this.reportProgress('');
     this.reportProgress('更新完成');

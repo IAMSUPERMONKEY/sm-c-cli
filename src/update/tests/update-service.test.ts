@@ -13,7 +13,7 @@ function createRunner(outputs: string[]): CommandRunner {
 
 describe('UpdateService', () => {
   it('发现新版本后使用默认官方 registry 升级 CLI 并更新 Skills', async () => {
-    const runner = createRunner(['1.2.0\n', '', '/opt/sm-c-cli/skills\n', '']);
+    const runner = createRunner(['1.2.0\n', '', '']);
     const progress = vi.fn();
     const service = new UpdateService(runner, '1.1.0', undefined, progress);
 
@@ -33,12 +33,11 @@ describe('UpdateService', () => {
       '--registry',
       officialRegistry,
     ]);
-    expect(runner.run).toHaveBeenNthCalledWith(3, 'sm-c-cli', ['skills', '+get-path']);
-    expect(runner.run).toHaveBeenNthCalledWith(4, 'npx', [
+    expect(runner.run).toHaveBeenNthCalledWith(3, 'npx', [
       '--yes',
       'skills',
       'add',
-      '/opt/sm-c-cli/skills',
+      'IAMSUPERMONKEY/sm-c-cli',
       '-y',
       '-g',
     ]);
@@ -52,7 +51,7 @@ describe('UpdateService', () => {
 
   it('使用调用方传入的 registry 检查并升级 CLI', async () => {
     const registry = 'https://registry.example.com/npm/';
-    const runner = createRunner(['2.0.0\n', '', '/opt/sm-c-cli/skills\n', '']);
+    const runner = createRunner(['2.0.0\n', '', '']);
     const service = new UpdateService(runner, '1.1.0', registry);
 
     await service.update();
@@ -70,19 +69,19 @@ describe('UpdateService', () => {
   });
 
   it('已是最新版本时不重装 CLI 但仍更新 Skills', async () => {
-    const runner = createRunner(['1.1.0\n', '/opt/sm-c-cli/skills\n', '']);
+    const runner = createRunner(['1.1.0\n', '']);
     const service = new UpdateService(runner, '1.1.0');
 
     const result = await service.update();
 
-    expect(runner.run).toHaveBeenCalledTimes(3);
+    expect(runner.run).toHaveBeenCalledTimes(2);
     expect(runner.run).not.toHaveBeenCalledWith('npm', expect.arrayContaining(['install']));
     expect(result.cliUpdated).toBe(false);
     expect(result.skillsUpdated).toBe(true);
   });
 
   it('本地版本高于 registry 版本时不会降级', async () => {
-    const runner = createRunner(['1.1.0\n', '/opt/sm-c-cli/skills\n', '']);
+    const runner = createRunner(['1.1.0\n', '']);
     const service = new UpdateService(runner, '2.0.0');
 
     await service.update();
@@ -105,13 +104,6 @@ describe('UpdateService', () => {
 
   it('拒绝 registry 返回的非法版本号', async () => {
     const runner = createRunner(['not-a-version\n']);
-    const service = new UpdateService(runner, '1.1.0');
-
-    await expect(service.update()).rejects.toMatchObject({ code: 30000 });
-  });
-
-  it('拒绝 CLI 返回的空 Skills 路径', async () => {
-    const runner = createRunner(['1.1.0\n', '\n']);
     const service = new UpdateService(runner, '1.1.0');
 
     await expect(service.update()).rejects.toMatchObject({ code: 30000 });
